@@ -7,6 +7,8 @@ function App() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [snippets, setSnippets] = useState([]);
+  const [newTitle, setNewTitle] = useState("");
+  const [newCode, setNewCode] = useState("");
 
   useEffect(() => {
     // check active session on load
@@ -56,7 +58,29 @@ function App() {
       <div className="vault-container">
         <h1>My Snippet Vault</h1>
         <button onClick={() => supabase.auth.signOut()}>Sign Out</button>
-        {/* some snippet form */}
+
+        <div className="snippet-form" style={{ marginBottom: "2rem" }}>
+          <input
+            type="text"
+            placeholder="Snippet Title (e.g., Git Undo)"
+            value={newTitle}
+            onChange={(e) => setNewTitle(e.target.value)}
+            style={{ display: "block", marginBottom: "10px", padding: "8px" }}
+          />
+          <textarea
+            placeholder="Paste your code here..."
+            value={newCode}
+            onChange={(e) => setNewCode(e.target.value)}
+            rows="4"
+            style={{
+              display: "block",
+              marginBottom: "10px",
+              width: "100%",
+              padding: "8px",
+            }}
+          />
+          <button onClick={addSnippet}>Save Snippet</button>
+        </div>
         <div className="snippet-grid">
           {snippets.map((snippet) => (
             <div key={snippet.id} className="snippet-card">
@@ -68,6 +92,30 @@ function App() {
       </div>
     );
   }
+
+  async function addSnippet() {
+    // basic validation
+    if (!newTitle || !newCode) return;
+
+    // insert into supabase
+    // (rls policy will check if the user is logged in)
+    // default value setting will add User ID
+    const { data, error } = await supabase
+      .from("snippets")
+      .insert([{ title: newTitle, code: newCode }])
+      .select();
+
+    if (error) {
+      console.log("Error adding snippet:", error);
+      alert("Error adding snippet. Did you forget the INSERT policy?");
+    } else {
+      // update local state to show the new snippet
+      setSnippets([...snippets, data[0]]);
+      setNewTitle("");
+      setNewCode("");
+    }
+  }
+
   // otherwise, show the login form
   return (
     <div className="container">
