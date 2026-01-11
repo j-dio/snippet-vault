@@ -53,6 +53,38 @@ function App() {
     }
   }, [session]);
 
+  async function addSnippet() {
+    // basic validation
+    if (!newTitle || !newCode) return;
+
+    // insert into supabase
+    // (rls policy will check if the user is logged in)
+    // default value setting will add User ID
+    const { data, error } = await supabase
+      .from("snippets")
+      .insert([{ title: newTitle, code: newCode }])
+      .select();
+
+    if (error) {
+      console.log("Error adding snippet:", error);
+      alert("Error adding snippet. Did you forget the INSERT policy?");
+    } else {
+      // update local state to show the new snippet
+      setSnippets([...snippets, data[0]]);
+      setNewTitle("");
+      setNewCode("");
+    }
+  }
+
+  async function copyToClipboard(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert("Copied to clipboard!");
+    } catch (err) {
+      console.error("Failed to copy!", err);
+    }
+  }
+
   if (session) {
     return (
       <div className="vault-container">
@@ -84,7 +116,12 @@ function App() {
         <div className="snippet-grid">
           {snippets.map((snippet) => (
             <div key={snippet.id} className="snippet-card">
-              <h3>{snippet.title}</h3>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+                <h3>{snippet.title}</h3>
+                <button onClick={() => copyToClipboard(snippet.code)}>
+                  Copy 📋
+                </button>              
+              </div>
               <pre>{snippet.code}</pre>
             </div>
           ))}
@@ -92,30 +129,7 @@ function App() {
       </div>
     );
   }
-
-  async function addSnippet() {
-    // basic validation
-    if (!newTitle || !newCode) return;
-
-    // insert into supabase
-    // (rls policy will check if the user is logged in)
-    // default value setting will add User ID
-    const { data, error } = await supabase
-      .from("snippets")
-      .insert([{ title: newTitle, code: newCode }])
-      .select();
-
-    if (error) {
-      console.log("Error adding snippet:", error);
-      alert("Error adding snippet. Did you forget the INSERT policy?");
-    } else {
-      // update local state to show the new snippet
-      setSnippets([...snippets, data[0]]);
-      setNewTitle("");
-      setNewCode("");
-    }
-  }
-
+  
   // otherwise, show the login form
   return (
     <div className="container">
