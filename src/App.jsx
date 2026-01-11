@@ -116,7 +116,12 @@ function App() {
         <div className="snippet-grid">
           {snippets.map((snippet) => (
             <div key={snippet.id} className="snippet-card">
-              <h3>{snippet.title}</h3>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+                <h3>{snippet.title}</h3>
+                <button onClick={() => copyToClipboard(snippet.code)}>
+                  Copy 📋
+                </button>              
+              </div>
               <pre>{snippet.code}</pre>
             </div>
           ))}
