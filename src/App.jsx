@@ -6,6 +6,7 @@ function App() {
   const [session, setSession] = useState(null);
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [snippets, setSnippets] = useState([]);
 
   useEffect(() => {
     // check active session on load
@@ -36,16 +37,37 @@ function App() {
     setLoading(false);
   };
 
-  // if logged in, show the Vault
+  useEffect(() => {
+    if (session) {
+      // supabase auto filters it to show only your data since RLS is enabled
+      const fetchSnippets = async () => {
+        const { data, error } = await supabase.from("snippets").select("*");
+
+        if (error) console.log("Error fetching", error);
+        else setSnippets(data);
+      };
+
+      fetchSnippets();
+    }
+  }, [session]);
+
   if (session) {
     return (
-      <div>
-        <h1>Welcome to The Vault</h1>
+      <div className="vault-container">
+        <h1>My Snippet Vault</h1>
         <button onClick={() => supabase.auth.signOut()}>Sign Out</button>
+        {/* some snippet form */}
+        <div className="snippet-grid">
+          {snippets.map((snippet) => (
+            <div key={snippet.id} className="snippet-card">
+              <h3>{snippet.title}</h3>
+              <pre>{snippet.code}</pre>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
-
   // otherwise, show the login form
   return (
     <div className="container">
@@ -57,10 +79,10 @@ function App() {
           placeholder="Your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required  
+          required
         />
         <button disabled={loading}>
-          {loading ? 'Sending Link...' : 'Send Magic Link'}
+          {loading ? "Sending Link..." : "Send Magic Link"}
         </button>
       </form>
     </div>
