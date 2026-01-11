@@ -7,6 +7,8 @@ function App() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [snippets, setSnippets] = useState([]);
+  const [newTitle, setNewTitle] = useState("");
+  const [newCode, setNewCode] = useState("");
 
   useEffect(() => {
     // check active session on load
@@ -68,6 +70,30 @@ function App() {
       </div>
     );
   }
+
+  async function addSnippet() {
+    // basic validation
+    if (!newTitle || !newCode) return;
+
+    // insert into supabase
+    // (rls policy will check if the user is logged in)
+    // default value setting will add User ID
+    const { data, error } = await supabase
+      .from("snippets")
+      .insert([{ title: newTitle, code: newCode }])
+      .select();
+
+    if (error) {
+      console.log("Error adding snippet:", error);
+      alert("Error adding snippet. Did you forget the INSERT policy?");
+    } else {
+      // update local state to show the new snippet
+      setSnippets([...snippets, data[0]]);
+      setNewTitle("");
+      setNewCode("");
+    }
+  }
+
   // otherwise, show the login form
   return (
     <div className="container">
