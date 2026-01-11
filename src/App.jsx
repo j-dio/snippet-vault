@@ -58,7 +58,29 @@ function App() {
       <div className="vault-container">
         <h1>My Snippet Vault</h1>
         <button onClick={() => supabase.auth.signOut()}>Sign Out</button>
-        {/* some snippet form */}
+
+        <div className="snippet-form" style={{ marginBottom: "2rem" }}>
+          <input
+            type="text"
+            placeholder="Snippet Title (e.g., Git Undo)"
+            value={newTitle}
+            onChange={(e) => setNewTitle(e.target.value)}
+            style={{ display: "block", marginBottom: "10px", padding: "8px" }}
+          />
+          <textarea
+            placeholder="Paste your code here..."
+            value={newCode}
+            onChange={(e) => setNewCode(e.target.value)}
+            rows="4"
+            style={{
+              display: "block",
+              marginBottom: "10px",
+              width: "100%",
+              padding: "8px",
+            }}
+          />
+          <button onClick={addSnippet}>Save Snippet</button>
+        </div>
         <div className="snippet-grid">
           {snippets.map((snippet) => (
             <div key={snippet.id} className="snippet-card">
