@@ -137,6 +137,9 @@ function App() {
                 <button onClick={() => copyToClipboard(snippet.code)}>
                   Copy 📋
                 </button>
+                <button onClick={() => deleteSnippet(snippet.id)}>
+                  Delete 🗑️
+                </button>
               </div>
               <pre>{snippet.code}</pre>
             </div>
