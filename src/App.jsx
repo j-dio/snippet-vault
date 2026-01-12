@@ -85,6 +85,16 @@ function App() {
     }
   }
 
+  async function deleteSnippet(id) {
+    const { error } = await supabase.from("snippets").delete().eq("id", id);
+
+    if (error) {
+      console.log("Error", error);
+    } else {
+      setSnippets(snippets.filter((snippet) => snippet.id !== id));
+    }
+  }
+
   if (session) {
     return (
       <div className="vault-container">
@@ -116,11 +126,17 @@ function App() {
         <div className="snippet-grid">
           {snippets.map((snippet) => (
             <div key={snippet.id} className="snippet-card">
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
                 <h3>{snippet.title}</h3>
                 <button onClick={() => copyToClipboard(snippet.code)}>
                   Copy 📋
-                </button>              
+                </button>
               </div>
               <pre>{snippet.code}</pre>
             </div>
@@ -129,7 +145,7 @@ function App() {
       </div>
     );
   }
-  
+
   // otherwise, show the login form
   return (
     <div className="container">
