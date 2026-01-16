@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "./supabaseClient";
 import toast, { Toaster } from "react-hot-toast";
+import SnippetCard from "./components/SnippetCard";
 import styles from "./App.module.css";
 
 function App() {
@@ -194,23 +195,12 @@ function App() {
         </div>
         <div className={styles.snippetGrid}>
           {snippets.map((snippet) => (
-            <div key={snippet.id} className={styles.snippetCard}>
-              <div className={styles.cardHeader}>
-                <h3>{snippet.title}</h3>
-                <div className={styles.cardActions}>
-                  <button onClick={() => copyToClipboard(snippet.code)}>
-                    Copy 📋
-                  </button>
-                  <button
-                    className={styles.deleteButton}
-                    onClick={() => deleteSnippet(snippet.id)}
-                  >
-                    Delete 🗑️
-                  </button>
-                </div>
-              </div>
-              <pre>{snippet.code}</pre>
-            </div>
+            <SnippetCard
+              key={snippet.id}
+              snippet={snippet}
+              onCopy={copyToClipboard}
+              onDelete={deleteSnippet}
+            />
           ))}
         </div>
       </div>
