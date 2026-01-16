@@ -4,6 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 import SnippetCard from "./components/SnippetCard";
 import SnippetForm from "./components/SnippetForm";
 import LoginForm from "./components/LoginForm";
+import Header from "./components/Header";
 import styles from "./App.module.css";
 
 function App() {
@@ -125,14 +126,9 @@ function App() {
           }}
         />
         <div className={styles.vaultContainer}>
-          <div className={styles.header}>
-            <h1>My Snippet Vault</h1>
-            <button className={styles.signOutButton} onClick={() => supabase.auth.signOut()}>
-              Sign Out
-            </button>
-          </div>
+          <Header onSignOut={() => supabase.auth.signOut()} />
 
-        <SnippetForm onSubmit={addSnippet} />
+          <SnippetForm onSubmit={addSnippet} />
         <div className={styles.snippetGrid}>
           {snippets.map((snippet) => (
             <SnippetCard
