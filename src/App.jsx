@@ -9,6 +9,8 @@ function App() {
   const [snippets, setSnippets] = useState([]);
   const [newTitle, setNewTitle] = useState("");
   const [newCode, setNewCode] = useState("");
+  const [newLanguage, setNewLanguage] = useState("javascript");
+  const [newTags, setNewTags] = useState("");
 
   useEffect(() => {
     // check active session on load
@@ -43,7 +45,10 @@ function App() {
     if (session) {
       // supabase auto filters it to show only your data since RLS is enabled
       const fetchSnippets = async () => {
-        const { data, error } = await supabase.from("snippets").select("*");
+        const { data, error } = await supabase
+          .from("snippets")
+          .select("*")
+          .order("created_at", { ascending: false });
 
         if (error) console.log("Error fetching", error);
         else setSnippets(data);
@@ -57,12 +62,22 @@ function App() {
     // basic validation
     if (!newTitle || !newCode) return;
 
+    // parse tags from comma-separated string
+    const tagsArray = newTags
+      ? newTags.split(",").map((tag) => tag.trim()).filter((tag) => tag)
+      : [];
+
     // insert into supabase
     // (rls policy will check if the user is logged in)
     // default value setting will add User ID
     const { data, error } = await supabase
       .from("snippets")
-      .insert([{ title: newTitle, code: newCode }])
+      .insert([{
+        title: newTitle,
+        code: newCode,
+        language: newLanguage,
+        tags: tagsArray
+      }])
       .select();
 
     if (error) {
@@ -70,9 +85,11 @@ function App() {
       alert("Error adding snippet. Did you forget the INSERT policy?");
     } else {
       // update local state to show the new snippet
-      setSnippets([...snippets, data[0]]);
+      setSnippets([data[0], ...snippets]);
       setNewTitle("");
       setNewCode("");
+      setNewLanguage("javascript");
+      setNewTags("");
     }
   }
 
@@ -107,6 +124,35 @@ function App() {
             placeholder="Snippet Title (e.g., Git Undo)"
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
+            style={{ display: "block", marginBottom: "10px", padding: "8px" }}
+          />
+          <select
+            value={newLanguage}
+            onChange={(e) => setNewLanguage(e.target.value)}
+            style={{ display: "block", marginBottom: "10px", padding: "8px" }}
+          >
+            <option value="javascript">JavaScript</option>
+            <option value="python">Python</option>
+            <option value="html">HTML</option>
+            <option value="css">CSS</option>
+            <option value="sql">SQL</option>
+            <option value="java">Java</option>
+            <option value="cpp">C++</option>
+            <option value="csharp">C#</option>
+            <option value="php">PHP</option>
+            <option value="ruby">Ruby</option>
+            <option value="go">Go</option>
+            <option value="rust">Rust</option>
+            <option value="typescript">TypeScript</option>
+            <option value="bash">Bash</option>
+            <option value="json">JSON</option>
+            <option value="text">Plain Text</option>
+          </select>
+          <input
+            type="text"
+            placeholder="Tags (comma-separated, e.g., react, hooks, state)"
+            value={newTags}
+            onChange={(e) => setNewTags(e.target.value)}
             style={{ display: "block", marginBottom: "10px", padding: "8px" }}
           />
           <textarea
