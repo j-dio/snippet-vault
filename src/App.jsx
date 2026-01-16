@@ -3,12 +3,11 @@ import { supabase } from "./supabaseClient";
 import toast, { Toaster } from "react-hot-toast";
 import SnippetCard from "./components/SnippetCard";
 import SnippetForm from "./components/SnippetForm";
+import LoginForm from "./components/LoginForm";
 import styles from "./App.module.css";
 
 function App() {
   const [session, setSession] = useState(null);
-  const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
   const [snippets, setSnippets] = useState([]);
 
   useEffect(() => {
@@ -27,9 +26,7 @@ function App() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  const handleLogin = async (email) => {
     const { error } = await supabase.auth.signInWithOtp({ email });
 
     if (error) {
@@ -37,7 +34,6 @@ function App() {
     } else {
       toast.success("Check your email for the login link!");
     }
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -177,22 +173,7 @@ function App() {
           },
         }}
       />
-      <div className={styles.container}>
-        <h1>Snippet Vault</h1>
-        <p>Sign in via Magic Link</p>
-        <form onSubmit={handleLogin}>
-          <input
-            type="email"
-            placeholder="Your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <button disabled={loading}>
-            {loading ? "Sending Link..." : "Send Magic Link"}
-          </button>
-        </form>
-      </div>
+      <LoginForm onSubmit={handleLogin} />
     </>
   );
 }
