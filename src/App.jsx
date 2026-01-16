@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "./supabaseClient";
-import "./App.css";
+import styles from "./App.module.css";
 
 function App() {
   const [session, setSession] = useState(null);
@@ -114,22 +114,24 @@ function App() {
 
   if (session) {
     return (
-      <div className="vault-container">
-        <h1>My Snippet Vault</h1>
-        <button onClick={() => supabase.auth.signOut()}>Sign Out</button>
+      <div className={styles.vaultContainer}>
+        <div className={styles.header}>
+          <h1>My Snippet Vault</h1>
+          <button className={styles.signOutButton} onClick={() => supabase.auth.signOut()}>
+            Sign Out
+          </button>
+        </div>
 
-        <div className="snippet-form" style={{ marginBottom: "2rem" }}>
+        <div className={styles.snippetForm}>
           <input
             type="text"
             placeholder="Snippet Title (e.g., Git Undo)"
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
-            style={{ display: "block", marginBottom: "10px", padding: "8px" }}
           />
           <select
             value={newLanguage}
             onChange={(e) => setNewLanguage(e.target.value)}
-            style={{ display: "block", marginBottom: "10px", padding: "8px" }}
           >
             <option value="javascript">JavaScript</option>
             <option value="python">Python</option>
@@ -153,39 +155,31 @@ function App() {
             placeholder="Tags (comma-separated, e.g., react, hooks, state)"
             value={newTags}
             onChange={(e) => setNewTags(e.target.value)}
-            style={{ display: "block", marginBottom: "10px", padding: "8px" }}
           />
           <textarea
             placeholder="Paste your code here..."
             value={newCode}
             onChange={(e) => setNewCode(e.target.value)}
             rows="4"
-            style={{
-              display: "block",
-              marginBottom: "10px",
-              width: "100%",
-              padding: "8px",
-            }}
           />
           <button onClick={addSnippet}>Save Snippet</button>
         </div>
-        <div className="snippet-grid">
+        <div className={styles.snippetGrid}>
           {snippets.map((snippet) => (
-            <div key={snippet.id} className="snippet-card">
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
+            <div key={snippet.id} className={styles.snippetCard}>
+              <div className={styles.cardHeader}>
                 <h3>{snippet.title}</h3>
-                <button onClick={() => copyToClipboard(snippet.code)}>
-                  Copy 📋
-                </button>
-                <button onClick={() => deleteSnippet(snippet.id)}>
-                  Delete 🗑️
-                </button>
+                <div className={styles.cardActions}>
+                  <button onClick={() => copyToClipboard(snippet.code)}>
+                    Copy 📋
+                  </button>
+                  <button
+                    className={styles.deleteButton}
+                    onClick={() => deleteSnippet(snippet.id)}
+                  >
+                    Delete 🗑️
+                  </button>
+                </div>
               </div>
               <pre>{snippet.code}</pre>
             </div>
@@ -197,7 +191,7 @@ function App() {
 
   // otherwise, show the login form
   return (
-    <div className="container">
+    <div className={styles.container}>
       <h1>Snippet Vault</h1>
       <p>Sign in via Magic Link</p>
       <form onSubmit={handleLogin}>
