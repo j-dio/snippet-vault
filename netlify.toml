@@ -1,15 +1,18 @@
-# example netlify.toml
+# Netlify configuration for Snippet Vault
 [build]
   command = "npm run build"
   functions = "netlify/functions"
   publish = "dist"
 
-  ## Uncomment to use this redirect for Single Page Applications like create-react-app.
-  ## Not needed for static site generators.
-  #[[redirects]]
-  #  from = "/*"
-  #  to = "/index.html"
-  #  status = 200
+[build.environment]
+  # Make npm install more resilient to network errors
+  NPM_FLAGS = "--fetch-retries=5 --fetch-retry-factor=10"
+
+# SPA redirect for React Router (if used in future)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
   ## (optional) Settings for Netlify Dev
   ## https://github.com/netlify/cli/blob/main/docs/netlify-dev.md#project-detection
