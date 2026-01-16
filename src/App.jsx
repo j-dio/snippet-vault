@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "./supabaseClient";
+import toast, { Toaster } from "react-hot-toast";
 import styles from "./App.module.css";
 
 function App() {
@@ -34,9 +35,9 @@ function App() {
     const { error } = await supabase.auth.signInWithOtp({ email });
 
     if (error) {
-      alert(error.error_description || error.message);
+      toast.error(error.error_description || error.message);
     } else {
-      alert("Check your email for the login link!");
+      toast.success("Check your email for the login link!");
     }
     setLoading(false);
   };
@@ -82,7 +83,7 @@ function App() {
 
     if (error) {
       console.log("Error adding snippet:", error);
-      alert("Error adding snippet. Did you forget the INSERT policy?");
+      toast.error("Error adding snippet. Check your database permissions.");
     } else {
       // update local state to show the new snippet
       setSnippets([data[0], ...snippets]);
@@ -90,15 +91,17 @@ function App() {
       setNewCode("");
       setNewLanguage("javascript");
       setNewTags("");
+      toast.success("Snippet saved successfully!");
     }
   }
 
   async function copyToClipboard(text) {
     try {
       await navigator.clipboard.writeText(text);
-      alert("Copied to clipboard!");
+      toast.success("Copied to clipboard!");
     } catch (err) {
       console.error("Failed to copy!", err);
+      toast.error("Failed to copy to clipboard");
     }
   }
 
@@ -107,20 +110,45 @@ function App() {
 
     if (error) {
       console.log("Error", error);
+      toast.error("Failed to delete snippet");
     } else {
       setSnippets(snippets.filter((snippet) => snippet.id !== id));
+      toast.success("Snippet deleted successfully!");
     }
   }
 
   if (session) {
     return (
-      <div className={styles.vaultContainer}>
-        <div className={styles.header}>
-          <h1>My Snippet Vault</h1>
-          <button className={styles.signOutButton} onClick={() => supabase.auth.signOut()}>
-            Sign Out
-          </button>
-        </div>
+      <>
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            style: {
+              background: '#252526',
+              color: '#d4d4d4',
+              border: '1px solid #3e3e42',
+            },
+            success: {
+              iconTheme: {
+                primary: '#4ec9b0',
+                secondary: '#252526',
+              },
+            },
+            error: {
+              iconTheme: {
+                primary: '#f48771',
+                secondary: '#252526',
+              },
+            },
+          }}
+        />
+        <div className={styles.vaultContainer}>
+          <div className={styles.header}>
+            <h1>My Snippet Vault</h1>
+            <button className={styles.signOutButton} onClick={() => supabase.auth.signOut()}>
+              Sign Out
+            </button>
+          </div>
 
         <div className={styles.snippetForm}>
           <input
@@ -186,27 +214,52 @@ function App() {
           ))}
         </div>
       </div>
+      </>
     );
   }
 
   // otherwise, show the login form
   return (
-    <div className={styles.container}>
-      <h1>Snippet Vault</h1>
-      <p>Sign in via Magic Link</p>
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <button disabled={loading}>
-          {loading ? "Sending Link..." : "Send Magic Link"}
-        </button>
-      </form>
-    </div>
+    <>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: '#252526',
+            color: '#d4d4d4',
+            border: '1px solid #3e3e42',
+          },
+          success: {
+            iconTheme: {
+              primary: '#4ec9b0',
+              secondary: '#252526',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: '#f48771',
+              secondary: '#252526',
+            },
+          },
+        }}
+      />
+      <div className={styles.container}>
+        <h1>Snippet Vault</h1>
+        <p>Sign in via Magic Link</p>
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="Your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <button disabled={loading}>
+            {loading ? "Sending Link..." : "Send Magic Link"}
+          </button>
+        </form>
+      </div>
+    </>
   );
 }
 
