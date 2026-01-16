@@ -1,0 +1,34 @@
+/* Import theme variables */
+@import '../styles/theme.module.css';
+
+/* Header with Sign Out */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-xl);
+}
+
+.header h1 {
+  color: var(--text-primary);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+}
+
+.signOutButton {
+  padding: var(--space-sm) var(--space-lg);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.signOutButton:hover {
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-hover);
+}
