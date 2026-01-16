@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "./supabaseClient";
 import toast, { Toaster } from "react-hot-toast";
 import SnippetCard from "./components/SnippetCard";
+import SnippetForm from "./components/SnippetForm";
 import styles from "./App.module.css";
 
 function App() {
@@ -9,10 +10,6 @@ function App() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [snippets, setSnippets] = useState([]);
-  const [newTitle, setNewTitle] = useState("");
-  const [newCode, setNewCode] = useState("");
-  const [newLanguage, setNewLanguage] = useState("javascript");
-  const [newTags, setNewTags] = useState("");
 
   useEffect(() => {
     // check active session on load
@@ -60,25 +57,17 @@ function App() {
     }
   }, [session]);
 
-  async function addSnippet() {
-    // basic validation
-    if (!newTitle || !newCode) return;
-
-    // parse tags from comma-separated string
-    const tagsArray = newTags
-      ? newTags.split(",").map((tag) => tag.trim()).filter((tag) => tag)
-      : [];
-
+  async function addSnippet(formData) {
     // insert into supabase
     // (rls policy will check if the user is logged in)
     // default value setting will add User ID
     const { data, error } = await supabase
       .from("snippets")
       .insert([{
-        title: newTitle,
-        code: newCode,
-        language: newLanguage,
-        tags: tagsArray
+        title: formData.title,
+        code: formData.code,
+        language: formData.language,
+        tags: formData.tags
       }])
       .select();
 
@@ -88,10 +77,6 @@ function App() {
     } else {
       // update local state to show the new snippet
       setSnippets([data[0], ...snippets]);
-      setNewTitle("");
-      setNewCode("");
-      setNewLanguage("javascript");
-      setNewTags("");
       toast.success("Snippet saved successfully!");
     }
   }
@@ -151,48 +136,7 @@ function App() {
             </button>
           </div>
 
-        <div className={styles.snippetForm}>
-          <input
-            type="text"
-            placeholder="Snippet Title (e.g., Git Undo)"
-            value={newTitle}
-            onChange={(e) => setNewTitle(e.target.value)}
-          />
-          <select
-            value={newLanguage}
-            onChange={(e) => setNewLanguage(e.target.value)}
-          >
-            <option value="javascript">JavaScript</option>
-            <option value="python">Python</option>
-            <option value="html">HTML</option>
-            <option value="css">CSS</option>
-            <option value="sql">SQL</option>
-            <option value="java">Java</option>
-            <option value="cpp">C++</option>
-            <option value="csharp">C#</option>
-            <option value="php">PHP</option>
-            <option value="ruby">Ruby</option>
-            <option value="go">Go</option>
-            <option value="rust">Rust</option>
-            <option value="typescript">TypeScript</option>
-            <option value="bash">Bash</option>
-            <option value="json">JSON</option>
-            <option value="text">Plain Text</option>
-          </select>
-          <input
-            type="text"
-            placeholder="Tags (comma-separated, e.g., react, hooks, state)"
-            value={newTags}
-            onChange={(e) => setNewTags(e.target.value)}
-          />
-          <textarea
-            placeholder="Paste your code here..."
-            value={newCode}
-            onChange={(e) => setNewCode(e.target.value)}
-            rows="4"
-          />
-          <button onClick={addSnippet}>Save Snippet</button>
-        </div>
+        <SnippetForm onSubmit={addSnippet} />
         <div className={styles.snippetGrid}>
           {snippets.map((snippet) => (
             <SnippetCard
