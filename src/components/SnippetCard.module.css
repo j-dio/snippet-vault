@@ -1,6 +1,18 @@
 /* Import theme variables */
 @import '../styles/theme.module.css';
 
+/* Fade-in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Snippet Card */
 .snippetCard {
   background-color: var(--bg-secondary);
@@ -12,6 +24,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
+  animation: fadeInUp 0.3s ease-out forwards;
 }
 
 .snippetCard:hover {
@@ -61,6 +74,34 @@
   transform: scale(0.95);
 }
 
+/* Card Metadata */
+.cardMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.timestamp {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+}
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.tag {
+  padding: 2px var(--space-sm);
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  border: 1px solid var(--border-default);
+}
+
 /* Delete button with danger styling */
 .deleteButton {
   background-color: var(--error-bg) !important;
@@ -96,6 +137,18 @@
   color: var(--text-primary);
 }
 
+/* Slide-down animation */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Delete Confirmation */
 .deleteConfirm {
   background-color: var(--error-bg);
@@ -103,6 +156,7 @@
   border-radius: var(--radius-md);
   padding: var(--space-md);
   margin-top: var(--space-sm);
+  animation: slideDown 0.2s ease-out forwards;
 }
 
 .deleteConfirm p {
@@ -147,4 +201,40 @@
 .cancelButton:hover {
   background-color: var(--bg-elevated);
   border-color: var(--border-hover);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+  .snippetCard {
+    padding: var(--space-md);
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  .snippetCard h3 {
+    font-size: var(--font-size-base);
+  }
+
+  .cardActions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .cardActions button {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--font-size-xs);
+  }
+
+  .cardMeta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .expandButton {
+    font-size: var(--font-size-xs);
+  }
 }

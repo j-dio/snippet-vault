@@ -13,22 +13,29 @@ function LoginForm({ onSubmit }) {
   };
 
   return (
-    <div className={styles.container}>
+    <main className={styles.container} role="main">
       <h1>Snippet Vault</h1>
       <p>Sign in via Magic Link</p>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} aria-label="Sign in form">
         <input
           type="email"
           placeholder="Your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          aria-label="Email address"
+          autoComplete="email"
         />
-        <button disabled={loading}>
+        <button
+          type="submit"
+          disabled={loading}
+          aria-busy={loading}
+          aria-label={loading ? "Sending magic link" : "Send magic link to your email"}
+        >
           {loading ? "Sending Link..." : "Send Magic Link"}
         </button>
       </form>
-    </div>
+    </main>
   );
 }
 

@@ -54,10 +54,19 @@ function SnippetForm({ onSubmit, editingSnippet, onCancelEdit }) {
 
   const isEditing = !!editingSnippet;
 
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    handleSubmit();
+  };
+
   return (
-    <div className={`${styles.snippetForm} ${isEditing ? styles.editing : ""}`}>
+    <form
+      className={`${styles.snippetForm} ${isEditing ? styles.editing : ""}`}
+      onSubmit={handleFormSubmit}
+      aria-label={isEditing ? "Edit snippet form" : "Add new snippet form"}
+    >
       {isEditing && (
-        <div className={styles.editingHeader}>
+        <div className={styles.editingHeader} role="status" aria-live="polite">
           Editing: {editingSnippet.title}
         </div>
       )}
@@ -66,8 +75,14 @@ function SnippetForm({ onSubmit, editingSnippet, onCancelEdit }) {
         placeholder="Snippet Title (e.g., Git Undo)"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        aria-label="Snippet title"
+        required
       />
-      <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+      <select
+        value={language}
+        onChange={(e) => setLanguage(e.target.value)}
+        aria-label="Programming language"
+      >
         <option value="javascript">JavaScript</option>
         <option value="python">Python</option>
         <option value="html">HTML</option>
@@ -90,15 +105,18 @@ function SnippetForm({ onSubmit, editingSnippet, onCancelEdit }) {
         placeholder="Tags (comma-separated, e.g., react, hooks, state)"
         value={tags}
         onChange={(e) => setTags(e.target.value)}
+        aria-label="Tags, comma-separated"
       />
       <textarea
         placeholder="Paste your code here..."
         value={code}
         onChange={(e) => setCode(e.target.value)}
         rows="4"
+        aria-label="Code snippet"
+        required
       />
       <div className={styles.formActions}>
-        <button onClick={handleSubmit}>
+        <button type="submit" aria-label={isEditing ? "Update snippet" : "Save snippet"}>
           {isEditing ? "Update Snippet" : "Save Snippet"}
         </button>
         {isEditing && (
@@ -106,12 +124,13 @@ function SnippetForm({ onSubmit, editingSnippet, onCancelEdit }) {
             type="button"
             className={styles.cancelButton}
             onClick={handleCancel}
+            aria-label="Cancel editing"
           >
             Cancel
           </button>
         )}
       </div>
-    </div>
+    </form>
   );
 }
 

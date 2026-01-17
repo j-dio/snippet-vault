@@ -45,6 +45,8 @@ function Header({
   hasActiveFilters,
   sortOption,
   onSortChange,
+  snippetCount,
+  filteredCount,
 }) {
   const [inputValue, setInputValue] = useState(searchQuery);
 
@@ -64,22 +66,33 @@ function Header({
 
   const getDisplayName = (lang) => languageDisplayNames[lang] || lang;
 
+  const showingFiltered = hasActiveFilters && filteredCount !== snippetCount;
+
   return (
-    <div className={styles.header}>
+    <header className={styles.header} role="banner">
       <div className={styles.headerTop}>
-        <h1>My Snippet Vault</h1>
-        <div className={styles.headerControls}>
+        <div className={styles.titleSection}>
+          <h1>My Snippet Vault</h1>
+          <span className={styles.snippetCount} aria-live="polite">
+            {showingFiltered
+              ? `${filteredCount} of ${snippetCount} snippets`
+              : `${snippetCount} ${snippetCount === 1 ? "snippet" : "snippets"}`}
+          </span>
+        </div>
+        <nav className={styles.headerControls} aria-label="Snippet filters and actions">
           <input
-            type="text"
+            type="search"
             className={styles.searchInput}
             placeholder="Search snippets..."
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
+            aria-label="Search snippets by title or code"
           />
           <select
             className={styles.languageSelect}
             value={languageFilter}
             onChange={(e) => onLanguageChange(e.target.value)}
+            aria-label="Filter by programming language"
           >
             <option value="">All Languages</option>
             {languageOptions.map(({ language, count }) => (
@@ -92,6 +105,7 @@ function Header({
             className={styles.sortSelect}
             value={sortOption}
             onChange={(e) => onSortChange(e.target.value)}
+            aria-label="Sort snippets"
           >
             {sortOptions.map(({ value, label }) => (
               <option key={value} value={value}>
@@ -99,35 +113,46 @@ function Header({
               </option>
             ))}
           </select>
-          <button className={styles.signOutButton} onClick={onSignOut}>
+          <button
+            className={styles.signOutButton}
+            onClick={onSignOut}
+            aria-label="Sign out of your account"
+          >
             Sign Out
           </button>
-        </div>
+        </nav>
       </div>
 
       {allTags.length > 0 && (
-        <div className={styles.tagSection}>
-          <div className={styles.tagList}>
+        <div className={styles.tagSection} role="group" aria-label="Filter by tags">
+          <div className={styles.tagList} role="list">
             {allTags.map((tag) => (
               <button
                 key={tag}
+                role="listitem"
                 className={`${styles.tagPill} ${
                   selectedTags.includes(tag) ? styles.tagPillActive : ""
                 }`}
                 onClick={() => onTagToggle(tag)}
+                aria-pressed={selectedTags.includes(tag)}
+                aria-label={`Filter by tag: ${tag}`}
               >
                 {tag}
               </button>
             ))}
           </div>
           {hasActiveFilters && (
-            <button className={styles.clearFiltersButton} onClick={onClearFilters}>
+            <button
+              className={styles.clearFiltersButton}
+              onClick={onClearFilters}
+              aria-label="Clear all active filters"
+            >
               Clear filters
             </button>
           )}
         </div>
       )}
-    </div>
+    </header>
   );
 }
 
