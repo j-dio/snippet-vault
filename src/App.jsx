@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { supabase } from "./supabaseClient";
 import toast, { Toaster } from "react-hot-toast";
 import SnippetCard from "./components/SnippetCard";
@@ -10,6 +10,81 @@ import styles from "./App.module.css";
 function App() {
   const [session, setSession] = useState(null);
   const [snippets, setSnippets] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [languageFilter, setLanguageFilter] = useState("");
+  const [selectedTags, setSelectedTags] = useState([]);
+
+  // Get unique languages from snippets with counts
+  const languageOptions = useMemo(() => {
+    const langCounts = {};
+    snippets.forEach((snippet) => {
+      const lang = snippet.language || "plaintext";
+      langCounts[lang] = (langCounts[lang] || 0) + 1;
+    });
+    return Object.entries(langCounts)
+      .map(([language, count]) => ({ language, count }))
+      .sort((a, b) => a.language.localeCompare(b.language));
+  }, [snippets]);
+
+  // Get unique tags from all snippets
+  const allTags = useMemo(() => {
+    const tagSet = new Set();
+    snippets.forEach((snippet) => {
+      if (snippet.tags && Array.isArray(snippet.tags)) {
+        snippet.tags.forEach((tag) => tagSet.add(tag));
+      }
+    });
+    return Array.from(tagSet).sort();
+  }, [snippets]);
+
+  // Toggle tag selection
+  const toggleTag = (tag) => {
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
+  };
+
+  // Clear all filters
+  const clearFilters = () => {
+    setSearchQuery("");
+    setLanguageFilter("");
+    setSelectedTags([]);
+  };
+
+  // Check if any filters are active
+  const hasActiveFilters = searchQuery || languageFilter || selectedTags.length > 0;
+
+  // Filter snippets based on search query, language filter, and selected tags
+  const filteredSnippets = useMemo(() => {
+    let filtered = snippets;
+
+    // Filter by language
+    if (languageFilter) {
+      filtered = filtered.filter(
+        (snippet) => (snippet.language || "plaintext") === languageFilter
+      );
+    }
+
+    // Filter by selected tags (snippet must have ALL selected tags)
+    if (selectedTags.length > 0) {
+      filtered = filtered.filter((snippet) => {
+        if (!snippet.tags || !Array.isArray(snippet.tags)) return false;
+        return selectedTags.every((tag) => snippet.tags.includes(tag));
+      });
+    }
+
+    // Filter by search query (title and code, case-insensitive)
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (snippet) =>
+          snippet.title.toLowerCase().includes(query) ||
+          snippet.code.toLowerCase().includes(query)
+      );
+    }
+
+    return filtered;
+  }, [snippets, searchQuery, languageFilter, selectedTags]);
 
   useEffect(() => {
     // check active session on load
@@ -126,11 +201,23 @@ function App() {
           }}
         />
         <div className={styles.vaultContainer}>
-          <Header onSignOut={() => supabase.auth.signOut()} />
+          <Header
+            onSignOut={() => supabase.auth.signOut()}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            languageFilter={languageFilter}
+            onLanguageChange={setLanguageFilter}
+            languageOptions={languageOptions}
+            allTags={allTags}
+            selectedTags={selectedTags}
+            onTagToggle={toggleTag}
+            onClearFilters={clearFilters}
+            hasActiveFilters={hasActiveFilters}
+          />
 
           <SnippetForm onSubmit={addSnippet} />
         <div className={styles.snippetGrid}>
-          {snippets.map((snippet) => (
+          {filteredSnippets.map((snippet) => (
             <SnippetCard
               key={snippet.id}
               snippet={snippet}
