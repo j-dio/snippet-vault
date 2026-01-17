@@ -18,11 +18,22 @@
   flex-wrap: wrap;
 }
 
+.titleSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
 .header h1 {
   color: var(--text-primary);
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-bold);
   margin: 0;
+}
+
+.snippetCount {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
 }
 
 /* Header Controls Container */

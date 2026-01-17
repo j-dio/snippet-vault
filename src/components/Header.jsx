@@ -45,6 +45,8 @@ function Header({
   hasActiveFilters,
   sortOption,
   onSortChange,
+  snippetCount,
+  filteredCount,
 }) {
   const [inputValue, setInputValue] = useState(searchQuery);
 
@@ -64,10 +66,19 @@ function Header({
 
   const getDisplayName = (lang) => languageDisplayNames[lang] || lang;
 
+  const showingFiltered = hasActiveFilters && filteredCount !== snippetCount;
+
   return (
     <div className={styles.header}>
       <div className={styles.headerTop}>
-        <h1>My Snippet Vault</h1>
+        <div className={styles.titleSection}>
+          <h1>My Snippet Vault</h1>
+          <span className={styles.snippetCount}>
+            {showingFiltered
+              ? `${filteredCount} of ${snippetCount} snippets`
+              : `${snippetCount} ${snippetCount === 1 ? "snippet" : "snippets"}`}
+          </span>
+        </div>
         <div className={styles.headerControls}>
           <input
             type="text"

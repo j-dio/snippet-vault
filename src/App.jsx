@@ -294,6 +294,8 @@ function App() {
             hasActiveFilters={hasActiveFilters}
             sortOption={sortOption}
             onSortChange={setSortOption}
+            snippetCount={snippets.length}
+            filteredCount={filteredSnippets.length}
           />
 
           <SnippetForm

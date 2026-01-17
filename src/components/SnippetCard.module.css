@@ -74,6 +74,34 @@
   transform: scale(0.95);
 }
 
+/* Card Metadata */
+.cardMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.timestamp {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+}
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.tag {
+  padding: 2px var(--space-sm);
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  border: 1px solid var(--border-default);
+}
+
 /* Delete button with danger styling */
 .deleteButton {
   background-color: var(--error-bg) !important;
