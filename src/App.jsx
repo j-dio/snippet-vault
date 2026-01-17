@@ -200,8 +200,15 @@ function App() {
     }
   }, []);
 
-  const updateSnippet = useCallback(async (formData, snippetId) => {
-    const { data, error } = await supabase
+  const updateSnippet = useCallback(async (formData) => {
+    if (!editingSnippet) {
+      console.error("No snippet being edited");
+      toast.error("Error updating snippet.");
+      return;
+    }
+
+    const snippetId = editingSnippet.id;
+    const { error } = await supabase
       .from("snippets")
       .update({
         title: formData.title,
@@ -209,23 +216,29 @@ function App() {
         language: formData.language,
         tags: formData.tags
       })
-      .eq("id", snippetId)
-      .select();
+      .eq("id", snippetId);
 
     if (error) {
       console.log("Error updating snippet:", error);
       toast.error("Error updating snippet.");
     } else {
-      // Update local state
-      setSnippets((prev) => prev.map((s) => (s.id === snippetId ? data[0] : s)));
+      // Update local state with merged data
+      const updatedSnippet = {
+        ...editingSnippet,
+        title: formData.title,
+        code: formData.code,
+        language: formData.language,
+        tags: formData.tags
+      };
+      setSnippets((prev) => prev.map((s) => (s.id === snippetId ? updatedSnippet : s)));
       setEditingSnippet(null);
       toast.success("Snippet updated successfully!");
     }
-  }, []);
+  }, [editingSnippet]);
 
   const handleFormSubmit = useCallback((formData) => {
     if (editingSnippet) {
-      updateSnippet(formData, editingSnippet.id);
+      updateSnippet(formData);
     } else {
       addSnippet(formData);
     }
