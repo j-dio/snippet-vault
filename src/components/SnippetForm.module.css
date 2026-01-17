@@ -109,3 +109,30 @@
   background-color: var(--bg-elevated) !important;
   border-color: var(--border-hover) !important;
 }
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+  .snippetForm {
+    padding: var(--space-md);
+  }
+
+  .snippetForm input,
+  .snippetForm select,
+  .snippetForm textarea {
+    padding: var(--space-sm);
+    font-size: var(--font-size-sm);
+  }
+
+  .snippetForm textarea {
+    min-height: 100px;
+  }
+
+  .formActions {
+    flex-direction: column;
+  }
+
+  .formActions button {
+    width: 100%;
+    padding: var(--space-md);
+  }
+}

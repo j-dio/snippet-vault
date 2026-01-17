@@ -202,3 +202,39 @@
   background-color: var(--bg-elevated);
   border-color: var(--border-hover);
 }
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+  .snippetCard {
+    padding: var(--space-md);
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  .snippetCard h3 {
+    font-size: var(--font-size-base);
+  }
+
+  .cardActions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .cardActions button {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--font-size-xs);
+  }
+
+  .cardMeta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .expandButton {
+    font-size: var(--font-size-xs);
+  }
+}
