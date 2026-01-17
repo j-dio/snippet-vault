@@ -16,6 +16,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [languageFilter, setLanguageFilter] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
+  const [sortOption, setSortOption] = useState("date-desc");
 
   // Get unique languages from snippets with counts
   const languageOptions = useMemo(() => {
@@ -57,7 +58,7 @@ function App() {
   // Check if any filters are active
   const hasActiveFilters = searchQuery || languageFilter || selectedTags.length > 0;
 
-  // Filter snippets based on search query, language filter, and selected tags
+  // Filter and sort snippets
   const filteredSnippets = useMemo(() => {
     let filtered = snippets;
 
@@ -86,8 +87,26 @@ function App() {
       );
     }
 
-    return filtered;
-  }, [snippets, searchQuery, languageFilter, selectedTags]);
+    // Sort snippets
+    const sorted = [...filtered].sort((a, b) => {
+      switch (sortOption) {
+        case "date-desc":
+          return new Date(b.created_at) - new Date(a.created_at);
+        case "date-asc":
+          return new Date(a.created_at) - new Date(b.created_at);
+        case "title-asc":
+          return a.title.localeCompare(b.title);
+        case "title-desc":
+          return b.title.localeCompare(a.title);
+        case "language":
+          return (a.language || "plaintext").localeCompare(b.language || "plaintext");
+        default:
+          return 0;
+      }
+    });
+
+    return sorted;
+  }, [snippets, searchQuery, languageFilter, selectedTags, sortOption]);
 
   useEffect(() => {
     // check active session on load
@@ -218,6 +237,8 @@ function App() {
             onTagToggle={toggleTag}
             onClearFilters={clearFilters}
             hasActiveFilters={hasActiveFilters}
+            sortOption={sortOption}
+            onSortChange={setSortOption}
           />
 
           <SnippetForm onSubmit={addSnippet} />
