@@ -1,0 +1,30 @@
+/* Import theme variables */
+@import '../styles/theme.module.css';
+
+/* Code Block Wrapper */
+.codeBlockWrapper {
+  position: relative;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-default);
+  overflow: hidden;
+  background-color: #1e1e1e;
+}
+
+/* Language Badge */
+.languageBadge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: var(--space-xs) var(--space-sm);
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-medium);
+  border-bottom-left-radius: var(--radius-md);
+  border-left: 1px solid var(--border-default);
+  border-bottom: 1px solid var(--border-default);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: var(--z-base);
+}
