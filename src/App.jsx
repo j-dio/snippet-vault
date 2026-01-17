@@ -5,11 +5,14 @@ import SnippetCard from "./components/SnippetCard";
 import SnippetForm from "./components/SnippetForm";
 import LoginForm from "./components/LoginForm";
 import Header from "./components/Header";
+import EmptyState from "./components/EmptyState";
+import LoadingSpinner from "./components/LoadingSpinner";
 import styles from "./App.module.css";
 
 function App() {
   const [session, setSession] = useState(null);
   const [snippets, setSnippets] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [languageFilter, setLanguageFilter] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
@@ -116,6 +119,7 @@ function App() {
     if (session) {
       // supabase auto filters it to show only your data since RLS is enabled
       const fetchSnippets = async () => {
+        setLoading(true);
         const { data, error } = await supabase
           .from("snippets")
           .select("*")
@@ -123,6 +127,7 @@ function App() {
 
         if (error) console.log("Error fetching", error);
         else setSnippets(data);
+        setLoading(false);
       };
 
       fetchSnippets();
@@ -217,14 +222,23 @@ function App() {
 
           <SnippetForm onSubmit={addSnippet} />
         <div className={styles.snippetGrid}>
-          {filteredSnippets.map((snippet) => (
-            <SnippetCard
-              key={snippet.id}
-              snippet={snippet}
-              onCopy={copyToClipboard}
-              onDelete={deleteSnippet}
+          {loading ? (
+            <LoadingSpinner />
+          ) : filteredSnippets.length === 0 ? (
+            <EmptyState
+              type={snippets.length === 0 ? "no-snippets" : "no-results"}
+              onClearFilters={hasActiveFilters ? clearFilters : null}
             />
-          ))}
+          ) : (
+            filteredSnippets.map((snippet) => (
+              <SnippetCard
+                key={snippet.id}
+                snippet={snippet}
+                onCopy={copyToClipboard}
+                onDelete={deleteSnippet}
+              />
+            ))
+          )}
         </div>
       </div>
       </>
