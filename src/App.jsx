@@ -17,6 +17,7 @@ function App() {
   const [languageFilter, setLanguageFilter] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
   const [sortOption, setSortOption] = useState("date-desc");
+  const [editingSnippet, setEditingSnippet] = useState(null);
 
   // Get unique languages from snippets with counts
   const languageOptions = useMemo(() => {
@@ -199,6 +200,47 @@ function App() {
     }
   }
 
+  async function updateSnippet(formData) {
+    const { data, error } = await supabase
+      .from("snippets")
+      .update({
+        title: formData.title,
+        code: formData.code,
+        language: formData.language,
+        tags: formData.tags
+      })
+      .eq("id", editingSnippet.id)
+      .select();
+
+    if (error) {
+      console.log("Error updating snippet:", error);
+      toast.error("Error updating snippet.");
+    } else {
+      // Update local state
+      setSnippets(snippets.map((s) => (s.id === editingSnippet.id ? data[0] : s)));
+      setEditingSnippet(null);
+      toast.success("Snippet updated successfully!");
+    }
+  }
+
+  function handleFormSubmit(formData) {
+    if (editingSnippet) {
+      updateSnippet(formData);
+    } else {
+      addSnippet(formData);
+    }
+  }
+
+  function handleEditSnippet(snippet) {
+    setEditingSnippet(snippet);
+    // Scroll to form
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function handleCancelEdit() {
+    setEditingSnippet(null);
+  }
+
   if (session) {
     return (
       <>
@@ -241,7 +283,11 @@ function App() {
             onSortChange={setSortOption}
           />
 
-          <SnippetForm onSubmit={addSnippet} />
+          <SnippetForm
+            onSubmit={handleFormSubmit}
+            editingSnippet={editingSnippet}
+            onCancelEdit={handleCancelEdit}
+          />
         <div className={styles.snippetGrid}>
           {loading ? (
             <LoadingSpinner />
@@ -257,6 +303,7 @@ function App() {
                 snippet={snippet}
                 onCopy={copyToClipboard}
                 onDelete={deleteSnippet}
+                onEdit={handleEditSnippet}
               />
             ))
           )}

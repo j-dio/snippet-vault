@@ -1,11 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./SnippetForm.module.css";
 
-function SnippetForm({ onSubmit }) {
+function SnippetForm({ onSubmit, editingSnippet, onCancelEdit }) {
   const [title, setTitle] = useState("");
   const [code, setCode] = useState("");
   const [language, setLanguage] = useState("javascript");
   const [tags, setTags] = useState("");
+
+  // Populate form when editing a snippet
+  useEffect(() => {
+    if (editingSnippet) {
+      setTitle(editingSnippet.title || "");
+      setCode(editingSnippet.code || "");
+      setLanguage(editingSnippet.language || "javascript");
+      setTags(editingSnippet.tags ? editingSnippet.tags.join(", ") : "");
+    } else {
+      // Clear form when not editing
+      setTitle("");
+      setCode("");
+      setLanguage("javascript");
+      setTags("");
+    }
+  }, [editingSnippet]);
 
   const handleSubmit = () => {
     if (!title || !code) return;
@@ -23,15 +39,28 @@ function SnippetForm({ onSubmit }) {
       tags: tagsArray,
     });
 
-    // Clear form
-    setTitle("");
-    setCode("");
-    setLanguage("javascript");
-    setTags("");
+    // Clear form only if not editing (editing clears via useEffect)
+    if (!editingSnippet) {
+      setTitle("");
+      setCode("");
+      setLanguage("javascript");
+      setTags("");
+    }
   };
 
+  const handleCancel = () => {
+    onCancelEdit();
+  };
+
+  const isEditing = !!editingSnippet;
+
   return (
-    <div className={styles.snippetForm}>
+    <div className={`${styles.snippetForm} ${isEditing ? styles.editing : ""}`}>
+      {isEditing && (
+        <div className={styles.editingHeader}>
+          Editing: {editingSnippet.title}
+        </div>
+      )}
       <input
         type="text"
         placeholder="Snippet Title (e.g., Git Undo)"
@@ -68,7 +97,20 @@ function SnippetForm({ onSubmit }) {
         onChange={(e) => setCode(e.target.value)}
         rows="4"
       />
-      <button onClick={handleSubmit}>Save Snippet</button>
+      <div className={styles.formActions}>
+        <button onClick={handleSubmit}>
+          {isEditing ? "Update Snippet" : "Save Snippet"}
+        </button>
+        {isEditing && (
+          <button
+            type="button"
+            className={styles.cancelButton}
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
+        )}
+      </div>
     </div>
   );
 }
