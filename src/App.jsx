@@ -136,7 +136,7 @@ function App() {
   };
 
   useEffect(() => {
-    if (session) {
+    if (session?.user?.id) {
       // supabase auto filters it to show only your data since RLS is enabled
       const fetchSnippets = async () => {
         setLoading(true);
@@ -152,7 +152,7 @@ function App() {
 
       fetchSnippets();
     }
-  }, [session]);
+  }, [session?.user?.id]);
 
   const addSnippet = useCallback(async (formData) => {
     // insert into supabase
