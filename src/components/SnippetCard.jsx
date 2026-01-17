@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import CodeBlock from "./CodeBlock";
 import styles from "./SnippetCard.module.css";
 
 const MAX_COLLAPSED_LINES = 10;
 
-function SnippetCard({ snippet, onCopy, onDelete, onEdit }) {
+const SnippetCard = memo(function SnippetCard({ snippet, onCopy, onDelete, onEdit }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -78,6 +78,6 @@ function SnippetCard({ snippet, onCopy, onDelete, onEdit }) {
       )}
     </div>
   );
-}
+});
 
 export default SnippetCard;

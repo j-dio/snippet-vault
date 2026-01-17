@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { supabase } from "./supabaseClient";
 import toast, { Toaster } from "react-hot-toast";
 import SnippetCard from "./components/SnippetCard";
@@ -43,18 +43,18 @@ function App() {
   }, [snippets]);
 
   // Toggle tag selection
-  const toggleTag = (tag) => {
+  const toggleTag = useCallback((tag) => {
     setSelectedTags((prev) =>
       prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
     );
-  };
+  }, []);
 
   // Clear all filters
-  const clearFilters = () => {
+  const clearFilters = useCallback(() => {
     setSearchQuery("");
     setLanguageFilter("");
     setSelectedTags([]);
-  };
+  }, []);
 
   // Check if any filters are active
   const hasActiveFilters = searchQuery || languageFilter || selectedTags.length > 0;
@@ -154,7 +154,7 @@ function App() {
     }
   }, [session]);
 
-  async function addSnippet(formData) {
+  const addSnippet = useCallback(async (formData) => {
     // insert into supabase
     // (rls policy will check if the user is logged in)
     // default value setting will add User ID
@@ -173,12 +173,12 @@ function App() {
       toast.error("Error adding snippet. Check your database permissions.");
     } else {
       // update local state to show the new snippet
-      setSnippets([data[0], ...snippets]);
+      setSnippets((prev) => [data[0], ...prev]);
       toast.success("Snippet saved successfully!");
     }
-  }
+  }, []);
 
-  async function copyToClipboard(text) {
+  const copyToClipboard = useCallback(async (text) => {
     try {
       await navigator.clipboard.writeText(text);
       toast.success("Copied to clipboard!");
@@ -186,22 +186,29 @@ function App() {
       console.error("Failed to copy!", err);
       toast.error("Failed to copy to clipboard");
     }
-  }
+  }, []);
 
-  async function deleteSnippet(id) {
+  const deleteSnippet = useCallback(async (id) => {
     const { error } = await supabase.from("snippets").delete().eq("id", id);
 
     if (error) {
       console.log("Error", error);
       toast.error("Failed to delete snippet");
     } else {
-      setSnippets(snippets.filter((snippet) => snippet.id !== id));
+      setSnippets((prev) => prev.filter((snippet) => snippet.id !== id));
       toast.success("Snippet deleted successfully!");
     }
-  }
+  }, []);
 
-  async function updateSnippet(formData) {
-    const { data, error } = await supabase
+  const updateSnippet = useCallback(async (formData) => {
+    if (!editingSnippet) {
+      console.error("No snippet being edited");
+      toast.error("Error updating snippet.");
+      return;
+    }
+
+    const snippetId = editingSnippet.id;
+    const { error } = await supabase
       .from("snippets")
       .update({
         title: formData.title,
@@ -209,37 +216,43 @@ function App() {
         language: formData.language,
         tags: formData.tags
       })
-      .eq("id", editingSnippet.id)
-      .select();
+      .eq("id", snippetId);
 
     if (error) {
       console.log("Error updating snippet:", error);
       toast.error("Error updating snippet.");
     } else {
-      // Update local state
-      setSnippets(snippets.map((s) => (s.id === editingSnippet.id ? data[0] : s)));
+      // Update local state with merged data
+      const updatedSnippet = {
+        ...editingSnippet,
+        title: formData.title,
+        code: formData.code,
+        language: formData.language,
+        tags: formData.tags
+      };
+      setSnippets((prev) => prev.map((s) => (s.id === snippetId ? updatedSnippet : s)));
       setEditingSnippet(null);
       toast.success("Snippet updated successfully!");
     }
-  }
+  }, [editingSnippet]);
 
-  function handleFormSubmit(formData) {
+  const handleFormSubmit = useCallback((formData) => {
     if (editingSnippet) {
       updateSnippet(formData);
     } else {
       addSnippet(formData);
     }
-  }
+  }, [editingSnippet, updateSnippet, addSnippet]);
 
-  function handleEditSnippet(snippet) {
+  const handleEditSnippet = useCallback((snippet) => {
     setEditingSnippet(snippet);
     // Scroll to form
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }
+  }, []);
 
-  function handleCancelEdit() {
+  const handleCancelEdit = useCallback(() => {
     setEditingSnippet(null);
-  }
+  }, []);
 
   if (session) {
     return (
