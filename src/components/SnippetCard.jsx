@@ -58,15 +58,26 @@ const SnippetCard = memo(function SnippetCard({ snippet, onCopy, onDelete, onEdi
   };
 
   return (
-    <div className={styles.snippetCard}>
+    <article className={styles.snippetCard} aria-labelledby={`snippet-title-${snippet.id}`}>
       <div className={styles.cardHeader}>
-        <h3>{snippet.title}</h3>
-        <div className={styles.cardActions}>
-          <button onClick={() => onEdit(snippet)}>Edit ✏️</button>
-          <button onClick={() => onCopy(snippet.code)}>Copy 📋</button>
+        <h3 id={`snippet-title-${snippet.id}`}>{snippet.title}</h3>
+        <div className={styles.cardActions} role="group" aria-label="Snippet actions">
+          <button
+            onClick={() => onEdit(snippet)}
+            aria-label={`Edit snippet: ${snippet.title}`}
+          >
+            Edit ✏️
+          </button>
+          <button
+            onClick={() => onCopy(snippet.code)}
+            aria-label={`Copy code from: ${snippet.title}`}
+          >
+            Copy 📋
+          </button>
           <button
             className={styles.deleteButton}
             onClick={handleDeleteClick}
+            aria-label={`Delete snippet: ${snippet.title}`}
           >
             Delete 🗑️
           </button>
@@ -75,14 +86,14 @@ const SnippetCard = memo(function SnippetCard({ snippet, onCopy, onDelete, onEdi
 
       <div className={styles.cardMeta}>
         {snippet.created_at && (
-          <span className={styles.timestamp}>
+          <time className={styles.timestamp} dateTime={snippet.created_at}>
             {formatRelativeTime(snippet.created_at)}
-          </span>
+          </time>
         )}
         {tags.length > 0 && (
-          <div className={styles.tagList}>
+          <div className={styles.tagList} role="list" aria-label="Snippet tags">
             {tags.map((tag) => (
-              <span key={tag} className={styles.tag}>
+              <span key={tag} className={styles.tag} role="listitem">
                 {tag}
               </span>
             ))}
@@ -96,6 +107,8 @@ const SnippetCard = memo(function SnippetCard({ snippet, onCopy, onDelete, onEdi
           <button
             className={styles.expandButton}
             onClick={() => setIsExpanded(!isExpanded)}
+            aria-expanded={isExpanded}
+            aria-label={isExpanded ? "Collapse code" : `Expand code (${codeLines.length} lines)`}
           >
             {isExpanded ? "Show less ▲" : `Show more (${codeLines.length} lines) ▼`}
           </button>
@@ -103,25 +116,32 @@ const SnippetCard = memo(function SnippetCard({ snippet, onCopy, onDelete, onEdi
       </div>
 
       {showDeleteConfirm && (
-        <div className={styles.deleteConfirm}>
-          <p>Delete this snippet?</p>
+        <div
+          className={styles.deleteConfirm}
+          role="alertdialog"
+          aria-labelledby={`delete-title-${snippet.id}`}
+          aria-describedby={`delete-desc-${snippet.id}`}
+        >
+          <p id={`delete-title-${snippet.id}`}>Delete this snippet?</p>
           <div className={styles.confirmActions}>
             <button
               className={styles.confirmButton}
               onClick={handleConfirmDelete}
+              aria-label="Confirm delete"
             >
               Yes, delete
             </button>
             <button
               className={styles.cancelButton}
               onClick={handleCancelDelete}
+              aria-label="Cancel delete"
             >
               Cancel
             </button>
           </div>
         </div>
       )}
-    </div>
+    </article>
   );
 });
 

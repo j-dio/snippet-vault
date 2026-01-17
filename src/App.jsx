@@ -279,7 +279,7 @@ function App() {
             },
           }}
         />
-        <div className={styles.vaultContainer}>
+        <main className={styles.vaultContainer} role="main">
           <Header
             onSignOut={() => supabase.auth.signOut()}
             searchQuery={searchQuery}
@@ -303,27 +303,27 @@ function App() {
             editingSnippet={editingSnippet}
             onCancelEdit={handleCancelEdit}
           />
-        <div className={styles.snippetGrid}>
-          {loading ? (
-            <LoadingSpinner />
-          ) : filteredSnippets.length === 0 ? (
-            <EmptyState
-              type={snippets.length === 0 ? "no-snippets" : "no-results"}
-              onClearFilters={hasActiveFilters ? clearFilters : null}
-            />
-          ) : (
-            filteredSnippets.map((snippet) => (
-              <SnippetCard
-                key={snippet.id}
-                snippet={snippet}
-                onCopy={copyToClipboard}
-                onDelete={deleteSnippet}
-                onEdit={handleEditSnippet}
+          <section className={styles.snippetGrid} aria-label="Code snippets">
+            {loading ? (
+              <LoadingSpinner />
+            ) : filteredSnippets.length === 0 ? (
+              <EmptyState
+                type={snippets.length === 0 ? "no-snippets" : "no-results"}
+                onClearFilters={hasActiveFilters ? clearFilters : null}
               />
-            ))
-          )}
-        </div>
-      </div>
+            ) : (
+              filteredSnippets.map((snippet) => (
+                <SnippetCard
+                  key={snippet.id}
+                  snippet={snippet}
+                  onCopy={copyToClipboard}
+                  onDelete={deleteSnippet}
+                  onEdit={handleEditSnippet}
+                />
+              ))
+            )}
+          </section>
+        </main>
       </>
     );
   }
