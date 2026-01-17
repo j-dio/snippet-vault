@@ -7,6 +7,8 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--space-xl);
+  gap: var(--space-md);
+  flex-wrap: wrap;
 }
 
 .header h1 {
@@ -14,6 +16,37 @@
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-bold);
   margin: 0;
+}
+
+/* Header Controls Container */
+.headerControls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+/* Search Input */
+.searchInput {
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family-base);
+  min-width: 200px;
+  box-sizing: border-box;
+  transition: all var(--transition-fast);
+}
+
+.searchInput::placeholder {
+  color: var(--text-tertiary);
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  background-color: var(--bg-tertiary);
 }
 
 .signOutButton {
@@ -31,4 +64,26 @@
 .signOutButton:hover {
   background-color: var(--bg-tertiary);
   border-color: var(--border-hover);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-md);
+  }
+
+  .header h1 {
+    text-align: center;
+  }
+
+  .headerControls {
+    justify-content: center;
+  }
+
+  .searchInput {
+    flex: 1;
+    min-width: 0;
+  }
 }

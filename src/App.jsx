@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { supabase } from "./supabaseClient";
 import toast, { Toaster } from "react-hot-toast";
 import SnippetCard from "./components/SnippetCard";
@@ -10,6 +10,20 @@ import styles from "./App.module.css";
 function App() {
   const [session, setSession] = useState(null);
   const [snippets, setSnippets] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Filter snippets based on search query (title and code, case-insensitive)
+  const filteredSnippets = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return snippets;
+    }
+    const query = searchQuery.toLowerCase();
+    return snippets.filter(
+      (snippet) =>
+        snippet.title.toLowerCase().includes(query) ||
+        snippet.code.toLowerCase().includes(query)
+    );
+  }, [snippets, searchQuery]);
 
   useEffect(() => {
     // check active session on load
@@ -126,11 +140,15 @@ function App() {
           }}
         />
         <div className={styles.vaultContainer}>
-          <Header onSignOut={() => supabase.auth.signOut()} />
+          <Header
+            onSignOut={() => supabase.auth.signOut()}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+          />
 
           <SnippetForm onSubmit={addSnippet} />
         <div className={styles.snippetGrid}>
-          {snippets.map((snippet) => (
+          {filteredSnippets.map((snippet) => (
             <SnippetCard
               key={snippet.id}
               snippet={snippet}
