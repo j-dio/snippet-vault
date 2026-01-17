@@ -16,6 +16,7 @@
 .snippetForm textarea {
   display: block;
   width: 100%;
+  box-sizing: border-box;
   padding: var(--space-md);
   margin-bottom: var(--space-md);
   background-color: var(--bg-primary);

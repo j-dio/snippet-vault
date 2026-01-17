@@ -1,5 +1,5 @@
 /* Import theme variables */
-@import '../styles/theme.module.css';
+@import "../styles/theme.module.css";
 
 /* Login Container */
 .container {
@@ -7,6 +7,11 @@
   margin: 0 auto;
   padding: var(--space-2xl);
   text-align: center;
+  /* align the whole login container to the center of the screen*/
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .container h1 {

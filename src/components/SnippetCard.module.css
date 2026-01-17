@@ -27,19 +27,6 @@
   flex: 1;
 }
 
-.snippetCard pre {
-  background-color: var(--bg-primary);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-md);
-  padding: var(--space-md);
-  margin: 0;
-  overflow-x: auto;
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-sm);
-  color: var(--text-primary);
-  line-height: var(--line-height-relaxed);
-}
-
 /* Card Header with buttons */
 .cardHeader {
   display: flex;
