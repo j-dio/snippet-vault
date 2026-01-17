@@ -1,16 +1,93 @@
-# React + Vite
+# Snippet Vault
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React application for storing and managing code snippets with Supabase authentication and database backend.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Magic Link Authentication** - Secure passwordless login via email
+- **Code Snippet Management** - Create, edit, delete, and copy code snippets
+- **Syntax Highlighting** - Support for 16+ programming languages with VS Code-inspired dark theme
+- **Search & Filter** - Search by title/code, filter by language, and multi-select tag filtering
+- **Sorting Options** - Sort by date, title, or language
+- **Responsive Design** - Optimized for desktop, tablet, and mobile devices
+- **Accessibility** - ARIA labels, semantic HTML, and keyboard navigation support
+- **Smooth Animations** - Fade-in cards, slide-down dialogs, and transitions
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend:** React 18 + Vite
+- **Backend:** Supabase (Auth + PostgreSQL)
+- **Styling:** CSS Modules with custom properties
+- **Notifications:** react-hot-toast
+- **Syntax Highlighting:** react-syntax-highlighter
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+- Supabase account
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/snippet-vault.git
+   cd snippet-vault
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env` file with your Supabase credentials:
+   ```
+   VITE_SUPABASE_URL=your-supabase-url
+   VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+   ```
+
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+### Database Setup
+
+Run the migration script in your Supabase SQL editor to create the required table and indexes:
+
+```sql
+-- See migration.sql for the complete schema
+```
+
+## Available Scripts
+
+- `npm run dev` - Start development server with HMR
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build locally
+- `npm run lint` - Run ESLint
+
+## Project Structure
+
+```
+src/
+├── components/
+│   ├── CodeBlock.jsx       # Syntax highlighted code display
+│   ├── EmptyState.jsx      # Empty/no results states
+│   ├── Header.jsx          # App header with search/filters
+│   ├── LoadingSpinner.jsx  # Loading indicator
+│   ├── LoginForm.jsx       # Magic link login form
+│   ├── SnippetCard.jsx     # Individual snippet display
+│   └── SnippetForm.jsx     # Add/edit snippet form
+├── styles/
+│   └── theme.module.css    # CSS custom properties
+├── App.jsx                 # Main application component
+├── App.module.css          # App-level styles
+├── index.css               # Global styles
+└── supabaseClient.js       # Supabase client configuration
+```
+
+## License
+
+MIT
