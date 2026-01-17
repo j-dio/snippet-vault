@@ -12,6 +12,7 @@ function App() {
   const [snippets, setSnippets] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [languageFilter, setLanguageFilter] = useState("");
+  const [selectedTags, setSelectedTags] = useState([]);
 
   // Get unique languages from snippets with counts
   const languageOptions = useMemo(() => {
@@ -25,7 +26,35 @@ function App() {
       .sort((a, b) => a.language.localeCompare(b.language));
   }, [snippets]);
 
-  // Filter snippets based on search query and language filter
+  // Get unique tags from all snippets
+  const allTags = useMemo(() => {
+    const tagSet = new Set();
+    snippets.forEach((snippet) => {
+      if (snippet.tags && Array.isArray(snippet.tags)) {
+        snippet.tags.forEach((tag) => tagSet.add(tag));
+      }
+    });
+    return Array.from(tagSet).sort();
+  }, [snippets]);
+
+  // Toggle tag selection
+  const toggleTag = (tag) => {
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
+  };
+
+  // Clear all filters
+  const clearFilters = () => {
+    setSearchQuery("");
+    setLanguageFilter("");
+    setSelectedTags([]);
+  };
+
+  // Check if any filters are active
+  const hasActiveFilters = searchQuery || languageFilter || selectedTags.length > 0;
+
+  // Filter snippets based on search query, language filter, and selected tags
   const filteredSnippets = useMemo(() => {
     let filtered = snippets;
 
@@ -34,6 +63,14 @@ function App() {
       filtered = filtered.filter(
         (snippet) => (snippet.language || "plaintext") === languageFilter
       );
+    }
+
+    // Filter by selected tags (snippet must have ALL selected tags)
+    if (selectedTags.length > 0) {
+      filtered = filtered.filter((snippet) => {
+        if (!snippet.tags || !Array.isArray(snippet.tags)) return false;
+        return selectedTags.every((tag) => snippet.tags.includes(tag));
+      });
     }
 
     // Filter by search query (title and code, case-insensitive)
@@ -47,7 +84,7 @@ function App() {
     }
 
     return filtered;
-  }, [snippets, searchQuery, languageFilter]);
+  }, [snippets, searchQuery, languageFilter, selectedTags]);
 
   useEffect(() => {
     // check active session on load
@@ -171,6 +208,11 @@ function App() {
             languageFilter={languageFilter}
             onLanguageChange={setLanguageFilter}
             languageOptions={languageOptions}
+            allTags={allTags}
+            selectedTags={selectedTags}
+            onTagToggle={toggleTag}
+            onClearFilters={clearFilters}
+            hasActiveFilters={hasActiveFilters}
           />
 
           <SnippetForm onSubmit={addSnippet} />

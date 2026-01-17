@@ -29,6 +29,11 @@ function Header({
   languageFilter,
   onLanguageChange,
   languageOptions,
+  allTags,
+  selectedTags,
+  onTagToggle,
+  onClearFilters,
+  hasActiveFilters,
 }) {
   const [inputValue, setInputValue] = useState(searchQuery);
 
@@ -50,31 +55,56 @@ function Header({
 
   return (
     <div className={styles.header}>
-      <h1>My Snippet Vault</h1>
-      <div className={styles.headerControls}>
-        <input
-          type="text"
-          className={styles.searchInput}
-          placeholder="Search snippets..."
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-        />
-        <select
-          className={styles.languageSelect}
-          value={languageFilter}
-          onChange={(e) => onLanguageChange(e.target.value)}
-        >
-          <option value="">All Languages</option>
-          {languageOptions.map(({ language, count }) => (
-            <option key={language} value={language}>
-              {getDisplayName(language)} ({count})
-            </option>
-          ))}
-        </select>
-        <button className={styles.signOutButton} onClick={onSignOut}>
-          Sign Out
-        </button>
+      <div className={styles.headerTop}>
+        <h1>My Snippet Vault</h1>
+        <div className={styles.headerControls}>
+          <input
+            type="text"
+            className={styles.searchInput}
+            placeholder="Search snippets..."
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
+          <select
+            className={styles.languageSelect}
+            value={languageFilter}
+            onChange={(e) => onLanguageChange(e.target.value)}
+          >
+            <option value="">All Languages</option>
+            {languageOptions.map(({ language, count }) => (
+              <option key={language} value={language}>
+                {getDisplayName(language)} ({count})
+              </option>
+            ))}
+          </select>
+          <button className={styles.signOutButton} onClick={onSignOut}>
+            Sign Out
+          </button>
+        </div>
       </div>
+
+      {allTags.length > 0 && (
+        <div className={styles.tagSection}>
+          <div className={styles.tagList}>
+            {allTags.map((tag) => (
+              <button
+                key={tag}
+                className={`${styles.tagPill} ${
+                  selectedTags.includes(tag) ? styles.tagPillActive : ""
+                }`}
+                onClick={() => onTagToggle(tag)}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+          {hasActiveFilters && (
+            <button className={styles.clearFiltersButton} onClick={onClearFilters}>
+              Clear filters
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }
