@@ -49,6 +49,31 @@
   background-color: var(--bg-tertiary);
 }
 
+/* Language Filter Dropdown */
+.languageSelect {
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family-base);
+  min-width: 160px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.languageSelect:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  background-color: var(--bg-tertiary);
+}
+
+.languageSelect:hover {
+  border-color: var(--border-hover);
+}
+
 .signOutButton {
   padding: var(--space-sm) var(--space-lg);
   background-color: var(--bg-secondary);
@@ -79,10 +104,16 @@
   }
 
   .headerControls {
+    flex-wrap: wrap;
     justify-content: center;
   }
 
   .searchInput {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .languageSelect {
     flex: 1;
     min-width: 0;
   }

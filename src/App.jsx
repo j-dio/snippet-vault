@@ -11,19 +11,43 @@ function App() {
   const [session, setSession] = useState(null);
   const [snippets, setSnippets] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [languageFilter, setLanguageFilter] = useState("");
 
-  // Filter snippets based on search query (title and code, case-insensitive)
+  // Get unique languages from snippets with counts
+  const languageOptions = useMemo(() => {
+    const langCounts = {};
+    snippets.forEach((snippet) => {
+      const lang = snippet.language || "plaintext";
+      langCounts[lang] = (langCounts[lang] || 0) + 1;
+    });
+    return Object.entries(langCounts)
+      .map(([language, count]) => ({ language, count }))
+      .sort((a, b) => a.language.localeCompare(b.language));
+  }, [snippets]);
+
+  // Filter snippets based on search query and language filter
   const filteredSnippets = useMemo(() => {
-    if (!searchQuery.trim()) {
-      return snippets;
+    let filtered = snippets;
+
+    // Filter by language
+    if (languageFilter) {
+      filtered = filtered.filter(
+        (snippet) => (snippet.language || "plaintext") === languageFilter
+      );
     }
-    const query = searchQuery.toLowerCase();
-    return snippets.filter(
-      (snippet) =>
-        snippet.title.toLowerCase().includes(query) ||
-        snippet.code.toLowerCase().includes(query)
-    );
-  }, [snippets, searchQuery]);
+
+    // Filter by search query (title and code, case-insensitive)
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (snippet) =>
+          snippet.title.toLowerCase().includes(query) ||
+          snippet.code.toLowerCase().includes(query)
+      );
+    }
+
+    return filtered;
+  }, [snippets, searchQuery, languageFilter]);
 
   useEffect(() => {
     // check active session on load
@@ -144,6 +168,9 @@ function App() {
             onSignOut={() => supabase.auth.signOut()}
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
+            languageFilter={languageFilter}
+            onLanguageChange={setLanguageFilter}
+            languageOptions={languageOptions}
           />
 
           <SnippetForm onSubmit={addSnippet} />
