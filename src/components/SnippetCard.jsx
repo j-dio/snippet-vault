@@ -1,6 +1,9 @@
+import CodeBlock from "./CodeBlock";
 import styles from "./SnippetCard.module.css";
 
 function SnippetCard({ snippet, onCopy, onDelete }) {
+  const language = snippet.language || "plaintext";
+
   return (
     <div className={styles.snippetCard}>
       <div className={styles.cardHeader}>
@@ -15,7 +18,7 @@ function SnippetCard({ snippet, onCopy, onDelete }) {
           </button>
         </div>
       </div>
-      <pre>{snippet.code}</pre>
+      <CodeBlock code={snippet.code} language={language} />
     </div>
   );
 }
