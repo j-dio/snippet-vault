@@ -5,14 +5,19 @@ import SnippetCard from "./components/SnippetCard";
 import SnippetForm from "./components/SnippetForm";
 import LoginForm from "./components/LoginForm";
 import Header from "./components/Header";
+import EmptyState from "./components/EmptyState";
+import LoadingSpinner from "./components/LoadingSpinner";
 import styles from "./App.module.css";
 
 function App() {
   const [session, setSession] = useState(null);
   const [snippets, setSnippets] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [languageFilter, setLanguageFilter] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
+  const [sortOption, setSortOption] = useState("date-desc");
+  const [editingSnippet, setEditingSnippet] = useState(null);
 
   // Get unique languages from snippets with counts
   const languageOptions = useMemo(() => {
@@ -54,7 +59,7 @@ function App() {
   // Check if any filters are active
   const hasActiveFilters = searchQuery || languageFilter || selectedTags.length > 0;
 
-  // Filter snippets based on search query, language filter, and selected tags
+  // Filter and sort snippets
   const filteredSnippets = useMemo(() => {
     let filtered = snippets;
 
@@ -83,8 +88,26 @@ function App() {
       );
     }
 
-    return filtered;
-  }, [snippets, searchQuery, languageFilter, selectedTags]);
+    // Sort snippets
+    const sorted = [...filtered].sort((a, b) => {
+      switch (sortOption) {
+        case "date-desc":
+          return new Date(b.created_at) - new Date(a.created_at);
+        case "date-asc":
+          return new Date(a.created_at) - new Date(b.created_at);
+        case "title-asc":
+          return a.title.localeCompare(b.title);
+        case "title-desc":
+          return b.title.localeCompare(a.title);
+        case "language":
+          return (a.language || "plaintext").localeCompare(b.language || "plaintext");
+        default:
+          return 0;
+      }
+    });
+
+    return sorted;
+  }, [snippets, searchQuery, languageFilter, selectedTags, sortOption]);
 
   useEffect(() => {
     // check active session on load
@@ -116,6 +139,7 @@ function App() {
     if (session) {
       // supabase auto filters it to show only your data since RLS is enabled
       const fetchSnippets = async () => {
+        setLoading(true);
         const { data, error } = await supabase
           .from("snippets")
           .select("*")
@@ -123,6 +147,7 @@ function App() {
 
         if (error) console.log("Error fetching", error);
         else setSnippets(data);
+        setLoading(false);
       };
 
       fetchSnippets();
@@ -175,6 +200,47 @@ function App() {
     }
   }
 
+  async function updateSnippet(formData) {
+    const { data, error } = await supabase
+      .from("snippets")
+      .update({
+        title: formData.title,
+        code: formData.code,
+        language: formData.language,
+        tags: formData.tags
+      })
+      .eq("id", editingSnippet.id)
+      .select();
+
+    if (error) {
+      console.log("Error updating snippet:", error);
+      toast.error("Error updating snippet.");
+    } else {
+      // Update local state
+      setSnippets(snippets.map((s) => (s.id === editingSnippet.id ? data[0] : s)));
+      setEditingSnippet(null);
+      toast.success("Snippet updated successfully!");
+    }
+  }
+
+  function handleFormSubmit(formData) {
+    if (editingSnippet) {
+      updateSnippet(formData);
+    } else {
+      addSnippet(formData);
+    }
+  }
+
+  function handleEditSnippet(snippet) {
+    setEditingSnippet(snippet);
+    // Scroll to form
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function handleCancelEdit() {
+    setEditingSnippet(null);
+  }
+
   if (session) {
     return (
       <>
@@ -213,18 +279,34 @@ function App() {
             onTagToggle={toggleTag}
             onClearFilters={clearFilters}
             hasActiveFilters={hasActiveFilters}
+            sortOption={sortOption}
+            onSortChange={setSortOption}
           />
 
-          <SnippetForm onSubmit={addSnippet} />
+          <SnippetForm
+            onSubmit={handleFormSubmit}
+            editingSnippet={editingSnippet}
+            onCancelEdit={handleCancelEdit}
+          />
         <div className={styles.snippetGrid}>
-          {filteredSnippets.map((snippet) => (
-            <SnippetCard
-              key={snippet.id}
-              snippet={snippet}
-              onCopy={copyToClipboard}
-              onDelete={deleteSnippet}
+          {loading ? (
+            <LoadingSpinner />
+          ) : filteredSnippets.length === 0 ? (
+            <EmptyState
+              type={snippets.length === 0 ? "no-snippets" : "no-results"}
+              onClearFilters={hasActiveFilters ? clearFilters : null}
             />
-          ))}
+          ) : (
+            filteredSnippets.map((snippet) => (
+              <SnippetCard
+                key={snippet.id}
+                snippet={snippet}
+                onCopy={copyToClipboard}
+                onDelete={deleteSnippet}
+                onEdit={handleEditSnippet}
+              />
+            ))
+          )}
         </div>
       </div>
       </>

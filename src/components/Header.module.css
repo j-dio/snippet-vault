@@ -81,6 +81,31 @@
   border-color: var(--border-hover);
 }
 
+/* Sort Dropdown */
+.sortSelect {
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family-base);
+  min-width: 140px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.sortSelect:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  background-color: var(--bg-tertiary);
+}
+
+.sortSelect:hover {
+  border-color: var(--border-hover);
+}
+
 .signOutButton {
   padding: var(--space-sm) var(--space-lg);
   background-color: var(--bg-secondary);
@@ -185,6 +210,11 @@
   }
 
   .languageSelect {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .sortSelect {
     flex: 1;
     min-width: 0;
   }

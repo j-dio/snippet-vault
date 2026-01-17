@@ -22,6 +22,15 @@ const languageDisplayNames = {
   plaintext: "Plain Text",
 };
 
+// Sort option labels
+const sortOptions = [
+  { value: "date-desc", label: "Newest First" },
+  { value: "date-asc", label: "Oldest First" },
+  { value: "title-asc", label: "Title (A-Z)" },
+  { value: "title-desc", label: "Title (Z-A)" },
+  { value: "language", label: "Language" },
+];
+
 function Header({
   onSignOut,
   searchQuery,
@@ -34,6 +43,8 @@ function Header({
   onTagToggle,
   onClearFilters,
   hasActiveFilters,
+  sortOption,
+  onSortChange,
 }) {
   const [inputValue, setInputValue] = useState(searchQuery);
 
@@ -74,6 +85,17 @@ function Header({
             {languageOptions.map(({ language, count }) => (
               <option key={language} value={language}>
                 {getDisplayName(language)} ({count})
+              </option>
+            ))}
+          </select>
+          <select
+            className={styles.sortSelect}
+            value={sortOption}
+            onChange={(e) => onSortChange(e.target.value)}
+          >
+            {sortOptions.map(({ value, label }) => (
+              <option key={value} value={value}>
+                {label}
               </option>
             ))}
           </select>
