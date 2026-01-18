@@ -1,5 +1,5 @@
 /* Import theme variables */
-@import '../styles/theme.module.css';
+@import "../styles/theme.module.css";
 
 /* Fade-in animation */
 @keyframes fadeInUp {
@@ -13,18 +13,19 @@
   }
 }
 
-/* Snippet Card */
+/* Snippet Card - Compact */
 .snippetCard {
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-default);
-  border-radius: var(--radius-lg);
-  padding: var(--space-lg);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
   box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--transition-base), border-color var(--transition-base);
+  transition: box-shadow var(--transition-base),
+    border-color var(--transition-base);
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  gap: var(--space-sm);
   animation: fadeInUp 0.3s ease-out forwards;
   box-sizing: border-box;
 }
@@ -39,12 +40,12 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: var(--space-md);
+  gap: var(--space-sm);
 }
 
 .snippetCard h3 {
   color: var(--text-primary);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   margin: 0;
   line-height: var(--line-height-tight);
@@ -106,7 +107,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-sm);
+  gap: var(--space-xs);
 }
 
 .timestamp {
@@ -244,7 +245,7 @@
 /* Mobile responsiveness */
 @media (max-width: 640px) {
   .snippetCard {
-    padding: var(--space-md);
+    padding: var(--space-sm);
   }
 
   .cardHeader {
