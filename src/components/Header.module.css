@@ -138,9 +138,12 @@
 }
 
 .signOutButton {
-  padding: var(--space-sm) var(--space-lg);
-  background-color: var(--bg-secondary);
-  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  background-color: transparent;
+  color: var(--text-secondary);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-md);
   font-size: var(--font-size-sm);
@@ -152,6 +155,7 @@
 .signOutButton:hover {
   background-color: var(--bg-tertiary);
   border-color: var(--border-hover);
+  color: var(--text-primary);
 }
 
 /* Tag Section */
@@ -201,20 +205,22 @@
 
 /* Clear Filters Button */
 .clearFiltersButton {
-  padding: var(--space-xs) var(--space-md);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
   background-color: transparent;
-  color: var(--text-secondary);
-  border: 1px solid var(--border-default);
+  color: var(--text-tertiary);
+  border: 1px solid transparent;
   border-radius: var(--radius-md);
   font-size: var(--font-size-xs);
-  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-medium);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
 .clearFiltersButton:hover {
   background-color: var(--error-bg);
-  border-color: var(--error);
   color: var(--error);
 }
 
