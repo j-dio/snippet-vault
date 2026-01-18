@@ -66,6 +66,7 @@
   transition: all var(--transition-fast);
 }
 
+
 .cardActions button:hover {
   background-color: var(--bg-elevated);
   border-color: var(--accent-primary);

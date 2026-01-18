@@ -6,38 +6,41 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: var(--space-xl);
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
-/* Snippet Grid - Using Flexbox for reliable equal heights */
+/* Snippet Grid - CSS Grid for automatic row-based equal heights */
 .snippetGrid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--space-lg);
-  align-items: stretch;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
-/* Each card takes 1/3 of available width minus gaps */
+/* Ensure grid items don't overflow */
 .snippetGrid > * {
-  flex: 0 0 calc((100% - 2 * var(--space-lg)) / 3);
   min-width: 0;
 }
 
 /* Make empty state and loading span full width */
 .snippetGrid > *:only-child {
-  flex: 1 1 100%;
+  grid-column: 1 / -1;
 }
 
 /* Tablet: 2 columns */
 @media (max-width: 1024px) {
-  .snippetGrid > * {
-    flex: 0 0 calc((100% - var(--space-lg)) / 2);
+  .snippetGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 /* Mobile: 1 column */
 @media (max-width: 640px) {
-  .snippetGrid > * {
-    flex: 0 0 100%;
+  .snippetGrid {
+    grid-template-columns: 1fr;
   }
 
   .vaultContainer {
