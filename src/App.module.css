@@ -8,20 +8,24 @@
   flex-direction: column;
 }
 
-/* Content Area */
+/* Content Area - Slightly inset from edges */
 .content {
   flex: 1;
-  padding: var(--space-lg) var(--space-xl);
+  padding: var(--space-lg) var(--space-3xl);
+  max-width: 1800px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* Snippet Grid - 4 columns for full width */
+/* Snippet Grid - 4 columns */
 .snippetGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: var(--space-sm);
   width: 100%;
-  max-width: 100%;
   box-sizing: border-box;
+  padding: 0 var(--space-3xl) var(--space-lg);
 }
 
 /* Ensure grid items don't overflow */
@@ -52,10 +56,7 @@
 @media (max-width: 768px) {
   .snippetGrid {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .content {
-    padding: var(--space-md);
+    padding: 0 var(--space-md) var(--space-md);
   }
 }
 
@@ -63,9 +64,6 @@
 @media (max-width: 640px) {
   .snippetGrid {
     grid-template-columns: 1fr;
-  }
-
-  .content {
-    padding: var(--space-sm);
+    padding: 0 var(--space-sm) var(--space-sm);
   }
 }

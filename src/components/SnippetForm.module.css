@@ -1,5 +1,5 @@
 /* Import theme variables */
-@import '../styles/theme.module.css';
+@import "../styles/theme.module.css";
 
 /* Snippet Form - Inline horizontal layout */
 .snippetForm {
@@ -7,7 +7,7 @@
   border: 1px solid var(--border-default);
   border-radius: var(--radius-lg);
   padding: var(--space-md);
-  margin-bottom: var(--space-lg);
+  margin: 0 var(--space-3xl) var(--space-lg);
 }
 
 /* Form Header */
@@ -138,6 +138,10 @@
 
 /* Mobile responsiveness */
 @media (max-width: 900px) {
+  .snippetForm {
+    margin: 0 var(--space-md) var(--space-lg);
+  }
+
   .formRow {
     grid-template-columns: 1fr 1fr;
   }
@@ -150,6 +154,7 @@
 @media (max-width: 640px) {
   .snippetForm {
     padding: var(--space-sm);
+    margin: 0 var(--space-sm) var(--space-md);
   }
 
   .formRow {
