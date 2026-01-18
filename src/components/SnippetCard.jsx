@@ -1,4 +1,5 @@
 import { useState, memo } from "react";
+import { Pencil, Copy, Trash2, ChevronUp, ChevronDown } from "lucide-react";
 import CodeBlock from "./CodeBlock";
 import styles from "./SnippetCard.module.css";
 
@@ -63,23 +64,28 @@ const SnippetCard = memo(function SnippetCard({ snippet, onCopy, onDelete, onEdi
         <h3 id={`snippet-title-${snippet.id}`}>{snippet.title}</h3>
         <div className={styles.cardActions} role="group" aria-label="Snippet actions">
           <button
+            className={styles.iconButton}
             onClick={() => onEdit(snippet)}
             aria-label={`Edit snippet: ${snippet.title}`}
           >
-            Edit ✏️
+            <Pencil size={14} />
+            <span>Edit</span>
           </button>
           <button
+            className={styles.iconButton}
             onClick={() => onCopy(snippet.code)}
             aria-label={`Copy code from: ${snippet.title}`}
           >
-            Copy 📋
+            <Copy size={14} />
+            <span>Copy</span>
           </button>
           <button
-            className={styles.deleteButton}
+            className={`${styles.iconButton} ${styles.deleteButton}`}
             onClick={handleDeleteClick}
             aria-label={`Delete snippet: ${snippet.title}`}
           >
-            Delete 🗑️
+            <Trash2 size={14} />
+            <span>Delete</span>
           </button>
         </div>
       </div>
@@ -110,7 +116,17 @@ const SnippetCard = memo(function SnippetCard({ snippet, onCopy, onDelete, onEdi
             aria-expanded={isExpanded}
             aria-label={isExpanded ? "Collapse code" : `Expand code (${codeLines.length} lines)`}
           >
-            {isExpanded ? "Show less ▲" : `Show more (${codeLines.length} lines) ▼`}
+            {isExpanded ? (
+              <>
+                <span>Show less</span>
+                <ChevronUp size={14} />
+              </>
+            ) : (
+              <>
+                <span>Show more ({codeLines.length} lines)</span>
+                <ChevronDown size={14} />
+              </>
+            )}
           </button>
         )}
       </div>
@@ -129,7 +145,8 @@ const SnippetCard = memo(function SnippetCard({ snippet, onCopy, onDelete, onEdi
               onClick={handleConfirmDelete}
               aria-label="Confirm delete"
             >
-              Yes, delete
+              <Trash2 size={14} />
+              <span>Yes, delete</span>
             </button>
             <button
               className={styles.cancelButton}

@@ -5,7 +5,7 @@
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -34,47 +34,71 @@
   border-color: var(--border-hover);
 }
 
-.snippetCard h3 {
-  color: var(--text-primary);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  margin: 0;
-  flex: 1;
-}
-
-/* Card Header with buttons */
+/* Card Header */
 .cardHeader {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: var(--space-sm);
+  align-items: flex-start;
+  gap: var(--space-md);
 }
 
+.snippetCard h3 {
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  margin: 0;
+  line-height: var(--line-height-tight);
+  flex: 1;
+  word-break: break-word;
+}
+
+/* Card Actions */
 .cardActions {
   display: flex;
-  gap: var(--space-sm);
+  gap: var(--space-xs);
+  flex-shrink: 0;
 }
 
-.cardActions button {
-  padding: var(--space-sm) var(--space-md);
-  background-color: var(--bg-tertiary);
-  color: var(--text-primary);
-  border: 1px solid var(--border-default);
+/* Icon Button - Ghost style */
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  background-color: transparent;
+  color: var(--text-secondary);
+  border: 1px solid transparent;
   border-radius: var(--radius-md);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
   cursor: pointer;
   transition: all var(--transition-fast);
+  white-space: nowrap;
 }
 
-
-.cardActions button:hover {
-  background-color: var(--bg-elevated);
-  border-color: var(--accent-primary);
-  color: var(--accent-primary);
+.iconButton:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border-default);
 }
 
-.cardActions button:active {
-  transform: scale(0.95);
+.iconButton:active {
+  transform: scale(0.97);
+}
+
+.iconButton svg {
+  flex-shrink: 0;
+}
+
+/* Delete button - Danger ghost */
+.deleteButton {
+  color: var(--text-tertiary);
+}
+
+.deleteButton:hover {
+  background-color: var(--error-bg);
+  color: var(--error);
+  border-color: transparent;
 }
 
 /* Card Metadata */
@@ -102,22 +126,10 @@
   color: var(--text-secondary);
   border-radius: var(--radius-sm);
   font-size: var(--font-size-xs);
-  border: 1px solid var(--border-default);
+  font-weight: var(--font-weight-medium);
 }
 
-/* Delete button with danger styling */
-.deleteButton {
-  background-color: var(--error-bg) !important;
-  border-color: var(--error) !important;
-  color: var(--error) !important;
-}
-
-.deleteButton:hover {
-  background-color: var(--error) !important;
-  color: var(--text-inverse) !important;
-}
-
-/* Code Container with expand/collapse */
+/* Code Container */
 .codeContainer {
   position: relative;
   flex: 1;
@@ -125,7 +137,12 @@
   flex-direction: column;
 }
 
+/* Expand Button */
 .expandButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
   width: 100%;
   padding: var(--space-sm);
   background-color: var(--bg-tertiary);
@@ -133,7 +150,8 @@
   border: 1px solid var(--border-default);
   border-top: none;
   border-radius: 0 0 var(--radius-md) var(--radius-md);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
@@ -143,11 +161,15 @@
   color: var(--text-primary);
 }
 
+.expandButton svg {
+  flex-shrink: 0;
+}
+
 /* Slide-down animation */
 @keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-8px);
   }
   to {
     opacity: 1;
@@ -168,6 +190,7 @@
 .deleteConfirm p {
   color: var(--text-primary);
   font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
   margin: 0 0 var(--space-sm) 0;
   text-align: center;
 }
@@ -179,33 +202,42 @@
 }
 
 .confirmButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
   padding: var(--space-sm) var(--space-md);
   background-color: var(--error);
-  color: var(--text-inverse);
+  color: white;
   border: none;
   border-radius: var(--radius-md);
   font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
 .confirmButton:hover {
-  background-color: #e05a4a;
+  background-color: #dc2626;
+}
+
+.confirmButton:active {
+  transform: scale(0.97);
 }
 
 .cancelButton {
   padding: var(--space-sm) var(--space-md);
-  background-color: var(--bg-tertiary);
+  background-color: transparent;
   color: var(--text-primary);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-md);
   font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
 .cancelButton:hover {
-  background-color: var(--bg-elevated);
+  background-color: var(--bg-tertiary);
   border-color: var(--border-hover);
 }
 
@@ -222,17 +254,21 @@
   }
 
   .snippetCard h3 {
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-sm);
   }
 
   .cardActions {
     width: 100%;
-    justify-content: flex-start;
   }
 
-  .cardActions button {
-    padding: var(--space-xs) var(--space-sm);
-    font-size: var(--font-size-xs);
+  .iconButton {
+    flex: 1;
+    justify-content: center;
+    padding: var(--space-sm);
+  }
+
+  .iconButton span {
+    display: none;
   }
 
   .cardMeta {

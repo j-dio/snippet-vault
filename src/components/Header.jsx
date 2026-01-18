@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Search, LogOut, X } from "lucide-react";
 import styles from "./Header.module.css";
 
 // Display names for languages
@@ -80,14 +81,17 @@ function Header({
           </span>
         </div>
         <nav className={styles.headerControls} aria-label="Snippet filters and actions">
-          <input
-            type="search"
-            className={styles.searchInput}
-            placeholder="Search snippets..."
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            aria-label="Search snippets by title or code"
-          />
+          <div className={styles.searchWrapper}>
+            <Search size={16} className={styles.searchIcon} />
+            <input
+              type="search"
+              className={styles.searchInput}
+              placeholder="Search snippets..."
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              aria-label="Search snippets by title or code"
+            />
+          </div>
           <select
             className={styles.languageSelect}
             value={languageFilter}
@@ -118,7 +122,8 @@ function Header({
             onClick={onSignOut}
             aria-label="Sign out of your account"
           >
-            Sign Out
+            <LogOut size={16} />
+            <span>Sign Out</span>
           </button>
         </nav>
       </div>
@@ -147,7 +152,8 @@ function Header({
               onClick={onClearFilters}
               aria-label="Clear all active filters"
             >
-              Clear filters
+              <X size={14} />
+              <span>Clear filters</span>
             </button>
           )}
         </div>
