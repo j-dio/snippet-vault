@@ -230,10 +230,14 @@
     flex-wrap: wrap;
   }
 
-  .searchInput {
+  .searchWrapper {
     flex: 1 1 100%;
-    min-width: 0;
     order: -1;
+  }
+
+  .searchInput {
+    width: 100%;
+    min-width: 0;
   }
 }
 
@@ -264,8 +268,12 @@
     gap: var(--space-sm);
   }
 
-  .searchInput {
+  .searchWrapper {
     flex: 1 1 100%;
+  }
+
+  .searchInput {
+    width: 100%;
     min-width: 0;
   }
 
@@ -275,8 +283,8 @@
     min-width: 0;
   }
 
-  .signOutButton {
-    padding: var(--space-sm) var(--space-md);
+  .signOutButton span {
+    display: none;
   }
 
   .tagSection {
