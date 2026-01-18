@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Search, LogOut, X } from "lucide-react";
+import { Search, LogOut, X, Code2 } from "lucide-react";
 import styles from "./Header.module.css";
 
 // Display names for languages
@@ -25,10 +25,10 @@ const languageDisplayNames = {
 
 // Sort option labels
 const sortOptions = [
-  { value: "date-desc", label: "Newest First" },
-  { value: "date-asc", label: "Oldest First" },
-  { value: "title-asc", label: "Title (A-Z)" },
-  { value: "title-desc", label: "Title (Z-A)" },
+  { value: "date-desc", label: "Newest" },
+  { value: "date-asc", label: "Oldest" },
+  { value: "title-asc", label: "A-Z" },
+  { value: "title-desc", label: "Z-A" },
   { value: "language", label: "Language" },
 ];
 
@@ -46,8 +46,6 @@ function Header({
   hasActiveFilters,
   sortOption,
   onSortChange,
-  snippetCount,
-  filteredCount,
 }) {
   const [inputValue, setInputValue] = useState(searchQuery);
 
@@ -67,20 +65,16 @@ function Header({
 
   const getDisplayName = (lang) => languageDisplayNames[lang] || lang;
 
-  const showingFiltered = hasActiveFilters && filteredCount !== snippetCount;
-
   return (
-    <header className={styles.header} role="banner">
-      <div className={styles.headerTop}>
-        <div className={styles.titleSection}>
-          <h1>My Snippet Vault</h1>
-          <span className={styles.snippetCount} aria-live="polite">
-            {showingFiltered
-              ? `${filteredCount} of ${snippetCount} snippets`
-              : `${snippetCount} ${snippetCount === 1 ? "snippet" : "snippets"}`}
-          </span>
+    <>
+      {/* Top Navbar */}
+      <nav className={styles.navbar} role="navigation">
+        <div className={styles.brand}>
+          <Code2 size={20} className={styles.brandIcon} />
+          <span>SnippetVault</span>
         </div>
-        <nav className={styles.headerControls} aria-label="Snippet filters and actions">
+
+        <div className={styles.searchSection}>
           <div className={styles.searchWrapper}>
             <Search size={16} className={styles.searchIcon} />
             <input
@@ -89,76 +83,82 @@ function Header({
               placeholder="Search snippets..."
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              aria-label="Search snippets by title or code"
+              aria-label="Search snippets"
             />
           </div>
-          <select
-            className={styles.languageSelect}
-            value={languageFilter}
-            onChange={(e) => onLanguageChange(e.target.value)}
-            aria-label="Filter by programming language"
-          >
-            <option value="">All Languages</option>
-            {languageOptions.map(({ language, count }) => (
-              <option key={language} value={language}>
-                {getDisplayName(language)} ({count})
-              </option>
-            ))}
-          </select>
-          <select
-            className={styles.sortSelect}
-            value={sortOption}
-            onChange={(e) => onSortChange(e.target.value)}
-            aria-label="Sort snippets"
-          >
-            {sortOptions.map(({ value, label }) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
+        </div>
+
+        <div className={styles.actions}>
           <button
             className={styles.signOutButton}
             onClick={onSignOut}
-            aria-label="Sign out of your account"
+            aria-label="Sign out"
           >
             <LogOut size={16} />
-            <span>Sign Out</span>
+            <span>Logout</span>
           </button>
-        </nav>
-      </div>
+        </div>
+      </nav>
 
-      {allTags.length > 0 && (
-        <div className={styles.tagSection} role="group" aria-label="Filter by tags">
-          <div className={styles.tagList} role="list">
+      {/* Tags & Filters Row */}
+      {(allTags.length > 0 || languageOptions.length > 0) && (
+        <div className={styles.tagSection}>
+          <div className={styles.tagList}>
             {allTags.map((tag) => (
               <button
                 key={tag}
-                role="listitem"
                 className={`${styles.tagPill} ${
                   selectedTags.includes(tag) ? styles.tagPillActive : ""
                 }`}
                 onClick={() => onTagToggle(tag)}
                 aria-pressed={selectedTags.includes(tag)}
-                aria-label={`Filter by tag: ${tag}`}
               >
                 {tag}
               </button>
             ))}
           </div>
-          {hasActiveFilters && (
-            <button
-              className={styles.clearFiltersButton}
-              onClick={onClearFilters}
-              aria-label="Clear all active filters"
+
+          <div className={styles.filtersRow}>
+            {hasActiveFilters && (
+              <button
+                className={styles.clearFiltersButton}
+                onClick={onClearFilters}
+              >
+                <X size={12} />
+                <span>Clear</span>
+              </button>
+            )}
+
+            <select
+              className={styles.filterSelect}
+              value={languageFilter}
+              onChange={(e) => onLanguageChange(e.target.value)}
+              aria-label="Filter by language"
             >
-              <X size={14} />
-              <span>Clear filters</span>
-            </button>
-          )}
+              <option value="">All Languages</option>
+              {languageOptions.map(({ language, count }) => (
+                <option key={language} value={language}>
+                  {getDisplayName(language)} ({count})
+                </option>
+              ))}
+            </select>
+
+            <select
+              className={styles.filterSelect}
+              value={sortOption}
+              onChange={(e) => onSortChange(e.target.value)}
+              aria-label="Sort by"
+            >
+              {sortOptions.map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       )}
-    </header>
+    </>
   );
 }
 

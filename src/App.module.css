@@ -1,20 +1,24 @@
 /* Import theme variables */
 @import './styles/theme.module.css';
 
-/* Vault Container */
+/* Main Layout - Full width */
 .vaultContainer {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: var(--space-xl);
-  box-sizing: border-box;
-  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Snippet Grid - CSS Grid for automatic row-based equal heights */
+/* Content Area */
+.content {
+  flex: 1;
+  padding: var(--space-lg) var(--space-xl);
+}
+
+/* Snippet Grid - 5 columns for full width */
 .snippetGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-lg);
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-md);
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
@@ -30,10 +34,28 @@
   grid-column: 1 / -1;
 }
 
+/* Large screens: 5 columns */
+@media (max-width: 1600px) {
+  .snippetGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Medium screens: 3 columns */
+@media (max-width: 1200px) {
+  .snippetGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 /* Tablet: 2 columns */
-@media (max-width: 1024px) {
+@media (max-width: 900px) {
   .snippetGrid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .content {
+    padding: var(--space-md);
   }
 }
 
@@ -43,7 +65,7 @@
     grid-template-columns: 1fr;
   }
 
-  .vaultContainer {
-    padding: var(--space-md);
+  .content {
+    padding: var(--space-sm);
   }
 }

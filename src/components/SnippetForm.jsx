@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Plus } from "lucide-react";
 import styles from "./SnippetForm.module.css";
 
 function SnippetForm({ onSubmit, editingSnippet, onCancelEdit }) {
@@ -65,66 +66,75 @@ function SnippetForm({ onSubmit, editingSnippet, onCancelEdit }) {
       onSubmit={handleFormSubmit}
       aria-label={isEditing ? "Edit snippet form" : "Add new snippet form"}
     >
-      {isEditing && (
-        <div className={styles.editingHeader} role="status" aria-live="polite">
+      {isEditing ? (
+        <div className={styles.editingHeader}>
           Editing: {editingSnippet.title}
         </div>
+      ) : (
+        <div className={styles.formHeader}>
+          <Plus size={16} />
+          <span>Add New Snippet</span>
+        </div>
       )}
-      <input
-        type="text"
-        placeholder="Snippet Title (e.g., Git Undo)"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        aria-label="Snippet title"
-        required
-      />
-      <select
-        value={language}
-        onChange={(e) => setLanguage(e.target.value)}
-        aria-label="Programming language"
-      >
-        <option value="javascript">JavaScript</option>
-        <option value="python">Python</option>
-        <option value="html">HTML</option>
-        <option value="css">CSS</option>
-        <option value="sql">SQL</option>
-        <option value="java">Java</option>
-        <option value="cpp">C++</option>
-        <option value="csharp">C#</option>
-        <option value="php">PHP</option>
-        <option value="ruby">Ruby</option>
-        <option value="go">Go</option>
-        <option value="rust">Rust</option>
-        <option value="typescript">TypeScript</option>
-        <option value="bash">Bash</option>
-        <option value="json">JSON</option>
-        <option value="text">Plain Text</option>
-      </select>
-      <input
-        type="text"
-        placeholder="Tags (comma-separated, e.g., react, hooks, state)"
-        value={tags}
-        onChange={(e) => setTags(e.target.value)}
-        aria-label="Tags, comma-separated"
-      />
+
+      <div className={styles.formRow}>
+        <input
+          type="text"
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          aria-label="Snippet title"
+          required
+        />
+        <select
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+          aria-label="Programming language"
+        >
+          <option value="javascript">JavaScript</option>
+          <option value="python">Python</option>
+          <option value="html">HTML</option>
+          <option value="css">CSS</option>
+          <option value="sql">SQL</option>
+          <option value="java">Java</option>
+          <option value="cpp">C++</option>
+          <option value="csharp">C#</option>
+          <option value="php">PHP</option>
+          <option value="ruby">Ruby</option>
+          <option value="go">Go</option>
+          <option value="rust">Rust</option>
+          <option value="typescript">TypeScript</option>
+          <option value="bash">Bash</option>
+          <option value="json">JSON</option>
+          <option value="text">Plain Text</option>
+        </select>
+        <input
+          type="text"
+          placeholder="Tags"
+          value={tags}
+          onChange={(e) => setTags(e.target.value)}
+          aria-label="Tags, comma-separated"
+        />
+      </div>
+
       <textarea
         placeholder="Paste your code here..."
         value={code}
         onChange={(e) => setCode(e.target.value)}
-        rows="4"
+        rows="3"
         aria-label="Code snippet"
         required
       />
+
       <div className={styles.formActions}>
-        <button type="submit" aria-label={isEditing ? "Update snippet" : "Save snippet"}>
-          {isEditing ? "Update Snippet" : "Save Snippet"}
+        <button type="submit">
+          {isEditing ? "Update" : "Save"}
         </button>
         {isEditing && (
           <button
             type="button"
             className={styles.cancelButton}
             onClick={handleCancel}
-            aria-label="Cancel editing"
           >
             Cancel
           </button>
