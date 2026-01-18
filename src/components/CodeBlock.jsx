@@ -37,6 +37,8 @@ function CodeBlock({ code, language = "plaintext" }) {
           borderRadius: "0 0 6px 6px",
           fontSize: "0.875rem",
           lineHeight: "1.75",
+          flex: 1,
+          minHeight: "80px",
         }}
         showLineNumbers={false}
         wrapLongLines={true}

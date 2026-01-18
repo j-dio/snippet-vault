@@ -8,32 +8,39 @@
   padding: var(--space-xl);
 }
 
-/* Snippet Grid */
+/* Snippet Grid - Using Flexbox for reliable equal heights */
 .snippetGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--space-lg);
+  align-items: stretch;
+}
+
+/* Each card takes 1/3 of available width minus gaps */
+.snippetGrid > * {
+  flex: 0 0 calc((100% - 2 * var(--space-lg)) / 3);
+  min-width: 0;
+}
+
+/* Make empty state and loading span full width */
+.snippetGrid > *:only-child {
+  flex: 1 1 100%;
 }
 
 /* Tablet: 2 columns */
 @media (max-width: 1024px) {
-  .snippetGrid {
-    grid-template-columns: repeat(2, 1fr);
+  .snippetGrid > * {
+    flex: 0 0 calc((100% - var(--space-lg)) / 2);
   }
 }
 
 /* Mobile: 1 column */
 @media (max-width: 640px) {
-  .snippetGrid {
-    grid-template-columns: 1fr;
+  .snippetGrid > * {
+    flex: 0 0 100%;
   }
 
   .vaultContainer {
     padding: var(--space-md);
   }
-
-  .snippetForm {
-    padding: var(--space-lg);
-  }
 }
-
