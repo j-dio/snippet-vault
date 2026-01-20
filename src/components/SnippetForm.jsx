@@ -58,6 +58,69 @@ function SnippetForm({ onSubmit, editingSnippet, onCancelEdit }) {
     onCancelEdit();
   };
 
+  // Handle Tab key for indentation in code textarea
+  const handleCodeKeyDown = (e) => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const textarea = e.target;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const indent = "  "; // 2 spaces for indentation
+
+      if (e.shiftKey) {
+        // Shift+Tab: Remove indentation
+        const beforeCursor = code.substring(0, start);
+        const lineStart = beforeCursor.lastIndexOf("\n") + 1;
+
+        // Check if line starts with spaces we can remove
+        if (code.substring(lineStart, lineStart + indent.length) === indent) {
+          const newCode =
+            code.substring(0, lineStart) +
+            code.substring(lineStart + indent.length);
+          setCode(newCode);
+          // Adjust cursor position
+          const newCursorPos = Math.max(lineStart, start - indent.length);
+          setTimeout(() => {
+            textarea.selectionStart = textarea.selectionEnd = newCursorPos;
+          }, 0);
+        }
+      } else {
+        // Tab: Insert indentation at cursor
+        const newCode = code.substring(0, start) + indent + code.substring(end);
+        setCode(newCode);
+        // Move cursor after the inserted indent
+        setTimeout(() => {
+          textarea.selectionStart = textarea.selectionEnd =
+            start + indent.length;
+        }, 0);
+      }
+    } else if (e.key === "Enter") {
+      // Auto-indent: maintain indentation from previous line
+      e.preventDefault();
+      const textarea = e.target;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+
+      // Find the current line's indentation
+      const beforeCursor = code.substring(0, start);
+      const lineStart = beforeCursor.lastIndexOf("\n") + 1;
+      const currentLine = code.substring(lineStart, start);
+      const match = currentLine.match(/^(\s*)/);
+      const indentation = match ? match[1] : "";
+
+      // Insert newline with same indentation
+      const newCode =
+        code.substring(0, start) + "\n" + indentation + code.substring(end);
+      setCode(newCode);
+
+      // Move cursor after the indentation
+      const newCursorPos = start + 1 + indentation.length;
+      setTimeout(() => {
+        textarea.selectionStart = textarea.selectionEnd = newCursorPos;
+      }, 0);
+    }
+  };
+
   const isEditing = !!editingSnippet;
 
   const handleFormSubmit = (e) => {
@@ -127,6 +190,7 @@ function SnippetForm({ onSubmit, editingSnippet, onCancelEdit }) {
         placeholder="Paste your code here..."
         value={code}
         onChange={(e) => setCode(e.target.value)}
+        onKeyDown={handleCodeKeyDown}
         rows="3"
         aria-label="Code snippet"
         required
