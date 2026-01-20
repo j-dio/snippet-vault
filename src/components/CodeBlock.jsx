@@ -10,6 +10,7 @@ const languageDisplayNames = {
   java: "Java",
   csharp: "C#",
   cpp: "C++",
+  gdscript: "GDScript",
   go: "Go",
   rust: "Rust",
   php: "PHP",

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Plus } from "lucide-react";
 import styles from "./SnippetForm.module.css";
 
@@ -7,29 +7,34 @@ function SnippetForm({ onSubmit, editingSnippet, onCancelEdit }) {
   const [code, setCode] = useState("");
   const [language, setLanguage] = useState("javascript");
   const [tags, setTags] = useState("");
+  const [prevEditingSnippetId, setPrevEditingSnippetId] = useState(null);
 
-  // Populate form when editing a snippet
-  useEffect(() => {
+  // Sync form state when editingSnippet changes (during render, not in effect)
+  const currentEditingId = editingSnippet?.id ?? null;
+  if (currentEditingId !== prevEditingSnippetId) {
+    setPrevEditingSnippetId(currentEditingId);
     if (editingSnippet) {
       setTitle(editingSnippet.title || "");
       setCode(editingSnippet.code || "");
       setLanguage(editingSnippet.language || "javascript");
       setTags(editingSnippet.tags ? editingSnippet.tags.join(", ") : "");
     } else {
-      // Clear form when not editing
       setTitle("");
       setCode("");
       setLanguage("javascript");
       setTags("");
     }
-  }, [editingSnippet]);
+  }
 
   const handleSubmit = () => {
     if (!title || !code) return;
 
     // Parse tags from comma-separated string
     const tagsArray = tags
-      ? tags.split(",").map((tag) => tag.trim()).filter((tag) => tag)
+      ? tags
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter((tag) => tag)
       : [];
 
     // Call parent's onSubmit with form data
@@ -101,6 +106,7 @@ function SnippetForm({ onSubmit, editingSnippet, onCancelEdit }) {
           <option value="csharp">C#</option>
           <option value="php">PHP</option>
           <option value="ruby">Ruby</option>
+          <option value="gdscript">GDScript</option>
           <option value="go">Go</option>
           <option value="rust">Rust</option>
           <option value="typescript">TypeScript</option>
@@ -127,9 +133,7 @@ function SnippetForm({ onSubmit, editingSnippet, onCancelEdit }) {
       />
 
       <div className={styles.formActions}>
-        <button type="submit">
-          {isEditing ? "Update" : "Save"}
-        </button>
+        <button type="submit">{isEditing ? "Update" : "Save"}</button>
         {isEditing && (
           <button
             type="button"
