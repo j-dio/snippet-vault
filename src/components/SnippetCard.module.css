@@ -43,13 +43,26 @@
   gap: var(--space-sm);
 }
 
+.cardTitleSection {
+  flex: 1;
+  min-width: 0;
+}
+
 .snippetCard h3 {
   color: var(--text-primary);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   margin: 0;
   line-height: var(--line-height-tight);
-  flex: 1;
+  word-break: break-word;
+}
+
+.useCase {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-normal);
+  margin: var(--space-xs) 0 0 0;
+  line-height: var(--line-height-normal);
   word-break: break-word;
 }
 

@@ -61,7 +61,12 @@ const SnippetCard = memo(function SnippetCard({ snippet, onCopy, onDelete, onEdi
   return (
     <article className={styles.snippetCard} aria-labelledby={`snippet-title-${snippet.id}`}>
       <div className={styles.cardHeader}>
-        <h3 id={`snippet-title-${snippet.id}`}>{snippet.title}</h3>
+        <div className={styles.cardTitleSection}>
+          <h3 id={`snippet-title-${snippet.id}`}>{snippet.title}</h3>
+          {snippet.use_case && (
+            <p className={styles.useCase}>{snippet.use_case}</p>
+          )}
+        </div>
         <div className={styles.cardActions} role="group" aria-label="Snippet actions">
           <button
             className={styles.iconButton}

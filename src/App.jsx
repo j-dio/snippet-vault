@@ -162,6 +162,7 @@ function App() {
       .from("snippets")
       .insert([{
         title: formData.title,
+        use_case: formData.use_case,
         code: formData.code,
         language: formData.language,
         tags: formData.tags
@@ -212,6 +213,7 @@ function App() {
       .from("snippets")
       .update({
         title: formData.title,
+        use_case: formData.use_case,
         code: formData.code,
         language: formData.language,
         tags: formData.tags
@@ -226,6 +228,7 @@ function App() {
       const updatedSnippet = {
         ...editingSnippet,
         title: formData.title,
+        use_case: formData.use_case,
         code: formData.code,
         language: formData.language,
         tags: formData.tags

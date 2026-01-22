@@ -4,6 +4,7 @@ import styles from "./SnippetForm.module.css";
 
 function SnippetForm({ onSubmit, editingSnippet, onCancelEdit }) {
   const [title, setTitle] = useState("");
+  const [useCase, setUseCase] = useState("");
   const [code, setCode] = useState("");
   const [language, setLanguage] = useState("javascript");
   const [tags, setTags] = useState("");
@@ -15,11 +16,13 @@ function SnippetForm({ onSubmit, editingSnippet, onCancelEdit }) {
     setPrevEditingSnippetId(currentEditingId);
     if (editingSnippet) {
       setTitle(editingSnippet.title || "");
+      setUseCase(editingSnippet.use_case || "");
       setCode(editingSnippet.code || "");
       setLanguage(editingSnippet.language || "javascript");
       setTags(editingSnippet.tags ? editingSnippet.tags.join(", ") : "");
     } else {
       setTitle("");
+      setUseCase("");
       setCode("");
       setLanguage("javascript");
       setTags("");
@@ -40,6 +43,7 @@ function SnippetForm({ onSubmit, editingSnippet, onCancelEdit }) {
     // Call parent's onSubmit with form data
     onSubmit({
       title,
+      use_case: useCase || null,
       code,
       language,
       tags: tagsArray,
@@ -48,6 +52,7 @@ function SnippetForm({ onSubmit, editingSnippet, onCancelEdit }) {
     // Clear form only if not editing (editing clears via useEffect)
     if (!editingSnippet) {
       setTitle("");
+      setUseCase("");
       setCode("");
       setLanguage("javascript");
       setTags("");
@@ -153,6 +158,13 @@ function SnippetForm({ onSubmit, editingSnippet, onCancelEdit }) {
           onChange={(e) => setTitle(e.target.value)}
           aria-label="Snippet title"
           required
+        />
+        <input
+          type="text"
+          placeholder="Use case (optional)"
+          value={useCase}
+          onChange={(e) => setUseCase(e.target.value)}
+          aria-label="Use case description"
         />
         <select
           value={language}
