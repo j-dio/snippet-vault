@@ -1,7 +1,7 @@
 /* Import theme variables */
 @import "../styles/theme.module.css";
 
-/* Login Container */
+/* Login Container - Glassmorphism */
 .container {
   max-width: 400px;
   margin: 0 auto;
@@ -12,6 +12,13 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  /* Glassmorphism */
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
 }
 
 .container h1 {
@@ -35,13 +42,15 @@
 
 .container input {
   padding: var(--space-md);
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-default);
+  background: rgba(9, 9, 11, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border-subtle);
   border-radius: var(--radius-md);
   color: var(--text-primary);
   font-size: var(--font-size-base);
   font-family: var(--font-family-base);
-  transition: border-color var(--transition-fast);
+  transition: border-color var(--transition-fast), background var(--transition-fast);
 }
 
 .container input:focus {

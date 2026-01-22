@@ -12,14 +12,21 @@
 
   /* Colors - Border (Zinc) */
   --border-default: #27272a;
-  --border-focus: #8b5cf6;
+  --border-focus: #14b8a6;
   --border-hover: #3f3f46;
 
-  /* Colors - Accent (Electric Violet) */
-  --accent-primary: #8b5cf6;
-  --accent-hover: #a78bfa;
-  --accent-active: #7c3aed;
-  --accent-muted: rgba(139, 92, 246, 0.15);
+  /* Colors - Accent (Teal) */
+  --accent-primary: #14b8a6;
+  --accent-hover: #2dd4bf;
+  --accent-active: #0d9488;
+  --accent-muted: rgba(20, 184, 166, 0.15);
+
+  /* Glassmorphism */
+  --glass-bg: rgba(24, 24, 27, 0.7);
+  --glass-bg-light: rgba(24, 24, 27, 0.5);
+  --glass-blur: blur(20px);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border-subtle: rgba(255, 255, 255, 0.05);
 
   /* Colors - Text (Zinc neutrals) */
   --text-primary: #fafafa;
@@ -65,7 +72,7 @@
     0 4px 6px -2px rgba(0, 0, 0, 0.5);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.7),
     0 10px 10px -5px rgba(0, 0, 0, 0.6);
-  --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.15);
+  --shadow-glow: 0 0 20px rgba(20, 184, 166, 0.15);
 
   /* Typography */
   --font-family-base: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,

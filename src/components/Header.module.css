@@ -1,15 +1,18 @@
 /* Import theme variables */
 @import '../styles/theme.module.css';
 
-/* Slim Top Navbar */
+/* Slim Top Navbar - Glassmorphism */
 .navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-lg);
   padding: var(--space-sm) var(--space-xl);
-  background-color: var(--bg-secondary);
-  border-bottom: 1px solid var(--border-default);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--glass-border);
+  border-top: 1px solid var(--glass-border-subtle);
   position: sticky;
   top: 0;
   z-index: var(--z-sticky);
@@ -107,14 +110,16 @@
   color: var(--text-primary);
 }
 
-/* Tag Pills in navbar */
+/* Tag Pills in navbar - Glassmorphism */
 .tagSection {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
   padding: var(--space-xs) var(--space-xl);
-  background-color: var(--bg-primary);
-  border-bottom: 1px solid var(--border-default);
+  background: var(--glass-bg-light);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--glass-border-subtle);
   overflow-x: auto;
 }
 
