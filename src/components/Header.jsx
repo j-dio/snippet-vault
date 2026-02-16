@@ -1,28 +1,7 @@
 import { useState, useEffect } from "react";
 import { Search, LogOut, X, Code2 } from "lucide-react";
+import { getLanguageDisplayName } from "../constants/languages";
 import styles from "./Header.module.css";
-
-// Display names for languages
-const languageDisplayNames = {
-  javascript: "JavaScript",
-  typescript: "TypeScript",
-  python: "Python",
-  java: "Java",
-  csharp: "C#",
-  cpp: "C++",
-  gdscript: "GDScript",
-  go: "Go",
-  rust: "Rust",
-  php: "PHP",
-  ruby: "Ruby",
-  swift: "Swift",
-  kotlin: "Kotlin",
-  sql: "SQL",
-  html: "HTML",
-  css: "CSS",
-  bash: "Bash",
-  plaintext: "Plain Text",
-};
 
 // Sort option labels
 const sortOptions = [
@@ -64,7 +43,7 @@ function Header({
     setInputValue(searchQuery);
   }, [searchQuery]);
 
-  const getDisplayName = (lang) => languageDisplayNames[lang] || lang;
+  const getDisplayName = (lang) => getLanguageDisplayName(lang);
 
   return (
     <>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
+import { languageOptions } from "../constants/languages";
 import styles from "./SnippetForm.module.css";
 
 function SnippetForm({ onSubmit, editingSnippet, onCancelEdit }) {
@@ -171,23 +172,11 @@ function SnippetForm({ onSubmit, editingSnippet, onCancelEdit }) {
           onChange={(e) => setLanguage(e.target.value)}
           aria-label="Programming language"
         >
-          <option value="javascript">JavaScript</option>
-          <option value="python">Python</option>
-          <option value="html">HTML</option>
-          <option value="css">CSS</option>
-          <option value="sql">SQL</option>
-          <option value="java">Java</option>
-          <option value="cpp">C++</option>
-          <option value="csharp">C#</option>
-          <option value="php">PHP</option>
-          <option value="ruby">Ruby</option>
-          <option value="gdscript">GDScript</option>
-          <option value="go">Go</option>
-          <option value="rust">Rust</option>
-          <option value="typescript">TypeScript</option>
-          <option value="bash">Bash</option>
-          <option value="json">JSON</option>
-          <option value="text">Plain Text</option>
+          {languageOptions.map(({ value, label }) => (
+            <option key={value} value={value}>
+              {label}
+            </option>
+          ))}
         </select>
         <input
           type="text"
