@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import { Search, LogOut, X, Code2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Search, LogOut, X, Code2, User } from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
 import { getLanguageDisplayName } from "../constants/languages";
 import styles from "./Header.module.css";
 
@@ -27,7 +29,12 @@ function Header({
   sortOption,
   onSortChange,
 }) {
+  const { user, profile } = useAuth();
+  const navigate = useNavigate();
   const [inputValue, setInputValue] = useState(searchQuery);
+
+  const avatarUrl = profile?.avatar_url || user?.user_metadata?.avatar_url;
+  const displayName = profile?.display_name || user?.user_metadata?.full_name || user?.email;
 
   // Debounce search input (300ms)
   useEffect(() => {
@@ -69,6 +76,22 @@ function Header({
         </div>
 
         <div className={styles.actions}>
+          <button
+            className={styles.profileButton}
+            onClick={() => navigate("/profile")}
+            aria-label="View profile"
+          >
+            {avatarUrl ? (
+              <img
+                src={avatarUrl}
+                alt=""
+                className={styles.avatarSmall}
+              />
+            ) : (
+              <User size={16} />
+            )}
+            <span className={styles.profileName}>{displayName}</span>
+          </button>
           <button
             className={styles.signOutButton}
             onClick={onSignOut}
