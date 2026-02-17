@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { supabase } from "../supabaseClient";
+import { useAuth } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
 import SnippetCard from "../components/SnippetCard";
 import SnippetForm from "../components/SnippetForm";
@@ -8,7 +9,8 @@ import EmptyState from "../components/EmptyState";
 import LoadingSpinner from "../components/LoadingSpinner";
 import styles from "./VaultPage.module.css";
 
-function VaultPage({ session }) {
+function VaultPage() {
+  const { user, signOut } = useAuth();
   const [snippets, setSnippets] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -104,7 +106,7 @@ function VaultPage({ session }) {
   }, [snippets, searchQuery, languageFilter, selectedTags, sortOption]);
 
   useEffect(() => {
-    if (session?.user?.id) {
+    if (user?.id) {
       const fetchSnippets = async () => {
         setLoading(true);
         const { data, error } = await supabase
@@ -119,7 +121,7 @@ function VaultPage({ session }) {
 
       fetchSnippets();
     }
-  }, [session?.user?.id]);
+  }, [user?.id]);
 
   const addSnippet = useCallback(async (formData) => {
     const { data, error } = await supabase
@@ -216,7 +218,7 @@ function VaultPage({ session }) {
   return (
     <main className={styles.vaultContainer} role="main">
       <Header
-        onSignOut={() => supabase.auth.signOut()}
+        onSignOut={signOut}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         languageFilter={languageFilter}

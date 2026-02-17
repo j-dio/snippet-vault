@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import { supabase } from "../supabaseClient";
+import { useAuth } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
 import styles from "./LoginPage.module.css";
 
-function LoginPage({ session }) {
+function LoginPage() {
+  const { session, signInWithOtp } = useAuth();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // If already authenticated, redirect to vault
   if (session) {
     return <Navigate to="/" replace />;
   }
@@ -16,7 +16,7 @@ function LoginPage({ session }) {
   const handleMagicLink = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const { error } = await supabase.auth.signInWithOtp({ email });
+    const { error } = await signInWithOtp(email);
 
     if (error) {
       toast.error(error.error_description || error.message);

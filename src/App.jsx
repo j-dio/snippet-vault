@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { supabase } from "./supabaseClient";
 import { Toaster } from "react-hot-toast";
+import { useAuth } from "./contexts/AuthContext";
 import VaultPage from "./pages/VaultPage";
 import LoginPage from "./pages/LoginPage";
 import AuthCallback from "./pages/AuthCallback";
@@ -27,23 +26,7 @@ const toastOptions = {
 };
 
 function App() {
-  const [session, setSession] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setLoading(false);
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
+  const { session, loading } = useAuth();
 
   if (loading) {
     return null;
@@ -57,13 +40,13 @@ function App() {
           path="/"
           element={
             session
-              ? <VaultPage session={session} />
+              ? <VaultPage />
               : <Navigate to="/login" replace />
           }
         />
         <Route
           path="/login"
-          element={<LoginPage session={session} />}
+          element={<LoginPage />}
         />
         <Route
           path="/auth/callback"
