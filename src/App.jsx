@@ -4,6 +4,7 @@ import { useAuth } from "./contexts/AuthContext";
 import VaultPage from "./pages/VaultPage";
 import LoginPage from "./pages/LoginPage";
 import AuthCallback from "./pages/AuthCallback";
+import ProfilePage from "./pages/ProfilePage";
 
 const toastOptions = {
   style: {
@@ -51,6 +52,10 @@ function App() {
         <Route
           path="/auth/callback"
           element={<AuthCallback />}
+        />
+        <Route
+          path="/profile"
+          element={<ProfilePage />}
         />
       </Routes>
     </>
