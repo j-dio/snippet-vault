@@ -1,21 +1,11 @@
 /* Import theme variables */
-@import "./styles/theme.module.css";
+@import "../styles/theme.module.css";
 
 /* Main Layout - Full width */
 .vaultContainer {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-}
-
-/* Content Area - Slightly inset from edges */
-.content {
-  flex: 1;
-  padding: var(--space-lg) var(--space-3xl);
-  max-width: 1800px;
-  margin: 0 auto;
-  width: 100%;
-  box-sizing: border-box;
 }
 
 /* Snippet Grid - 4 columns */

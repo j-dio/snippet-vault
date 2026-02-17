@@ -1,28 +1,9 @@
 import { useState, useEffect } from "react";
-import { Search, LogOut, X, Code2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Search, LogOut, X, Code2, User } from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
+import { getLanguageDisplayName } from "../constants/languages";
 import styles from "./Header.module.css";
-
-// Display names for languages
-const languageDisplayNames = {
-  javascript: "JavaScript",
-  typescript: "TypeScript",
-  python: "Python",
-  java: "Java",
-  csharp: "C#",
-  cpp: "C++",
-  gdscript: "GDScript",
-  go: "Go",
-  rust: "Rust",
-  php: "PHP",
-  ruby: "Ruby",
-  swift: "Swift",
-  kotlin: "Kotlin",
-  sql: "SQL",
-  html: "HTML",
-  css: "CSS",
-  bash: "Bash",
-  plaintext: "Plain Text",
-};
 
 // Sort option labels
 const sortOptions = [
@@ -48,7 +29,12 @@ function Header({
   sortOption,
   onSortChange,
 }) {
+  const { user, profile } = useAuth();
+  const navigate = useNavigate();
   const [inputValue, setInputValue] = useState(searchQuery);
+
+  const avatarUrl = profile?.avatar_url || user?.user_metadata?.avatar_url;
+  const displayName = profile?.display_name || user?.user_metadata?.full_name || user?.email;
 
   // Debounce search input (300ms)
   useEffect(() => {
@@ -64,7 +50,7 @@ function Header({
     setInputValue(searchQuery);
   }, [searchQuery]);
 
-  const getDisplayName = (lang) => languageDisplayNames[lang] || lang;
+  const getDisplayName = (lang) => getLanguageDisplayName(lang);
 
   return (
     <>
@@ -90,6 +76,22 @@ function Header({
         </div>
 
         <div className={styles.actions}>
+          <button
+            className={styles.profileButton}
+            onClick={() => navigate("/profile")}
+            aria-label="View profile"
+          >
+            {avatarUrl ? (
+              <img
+                src={avatarUrl}
+                alt=""
+                className={styles.avatarSmall}
+              />
+            ) : (
+              <User size={16} />
+            )}
+            <span className={styles.profileName}>{displayName}</span>
+          </button>
           <button
             className={styles.signOutButton}
             onClick={onSignOut}
