@@ -1,71 +1,81 @@
-/* Import theme variables */
 @import '../styles/theme.module.css';
 
-/* Slim Top Navbar - Glassmorphism */
+/* Navbar - frosted glass */
 .navbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-lg);
+  gap: var(--space-md);
   padding: var(--space-sm) var(--space-xl);
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border-bottom: 1px solid var(--glass-border);
-  border-top: 1px solid var(--glass-border-subtle);
   position: sticky;
   top: 0;
   z-index: var(--z-sticky);
 }
 
-/* Logo / Brand */
+/* Logo */
 .brand {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  color: var(--text-primary);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-semibold);
+  background: none;
+  border: none;
+  padding: var(--space-xs) 0;
+  cursor: pointer;
   white-space: nowrap;
+  color: var(--text-primary);
 }
 
-.brandIcon {
+.brand:focus-visible {
+  outline: none;
+}
+
+.logoMark {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
   color: var(--accent-primary);
+  background: var(--accent-muted);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
 }
 
-/* Center Section - Search */
+.logoText {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.01em;
+}
+
+/* Search */
 .searchSection {
   flex: 1;
-  max-width: 400px;
-  display: flex;
-  justify-content: center;
+  max-width: 380px;
 }
 
 .searchWrapper {
   position: relative;
   display: flex;
   align-items: center;
-  width: 100%;
 }
 
 .searchIcon {
   position: absolute;
-  left: var(--space-sm);
+  left: 10px;
   color: var(--text-tertiary);
   pointer-events: none;
 }
 
 .searchInput {
   width: 100%;
-  padding: var(--space-xs) var(--space-md);
-  padding-left: calc(var(--space-sm) + 16px + var(--space-xs));
-  background-color: var(--bg-primary);
+  padding: 6px 12px 6px 30px;
+  background: var(--glass-bg-light);
   color: var(--text-primary);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
   font-size: var(--font-size-sm);
   font-family: var(--font-family-base);
-  box-sizing: border-box;
   transition: all var(--transition-fast);
 }
 
@@ -76,61 +86,54 @@
 .searchInput:focus {
   outline: none;
   border-color: var(--border-focus);
+  background: var(--glass-bg);
 }
 
 .searchWrapper:focus-within .searchIcon {
   color: var(--accent-primary);
 }
 
-/* Right Section - Actions */
+.searchCount {
+  position: absolute;
+  right: 10px;
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+/* Actions */
 .actions {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
+  gap: 4px;
 }
 
-/* Profile button */
+.themeToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.themeToggle:hover {
+  background: var(--glass-bg-hover);
+  color: var(--text-primary);
+}
+
 .profileButton {
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
-  padding: var(--space-xs) var(--space-sm);
-  background-color: transparent;
-  color: var(--text-secondary);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  white-space: nowrap;
-}
-
-.profileButton:hover {
-  background-color: var(--bg-tertiary);
-  color: var(--text-primary);
-  border-color: var(--border-hover);
-}
-
-.avatarSmall {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.profileName {
-  max-width: 120px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.signOutButton {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-xs) var(--space-sm);
-  background-color: transparent;
+  padding: 4px 10px;
+  background: none;
   color: var(--text-secondary);
   border: 1px solid transparent;
   border-radius: var(--radius-md);
@@ -141,35 +144,69 @@
   white-space: nowrap;
 }
 
-.signOutButton:hover {
-  background-color: var(--bg-tertiary);
+.profileButton:hover {
+  background: var(--glass-bg-hover);
   color: var(--text-primary);
 }
 
-/* Tag Pills in navbar - Glassmorphism */
-.tagSection {
+.avatarSmall {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profileName {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.signOutButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: none;
+  color: var(--text-tertiary);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.signOutButton:hover {
+  background: var(--error-bg);
+  color: var(--error);
+}
+
+/* Filters bar */
+.filtersBar {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
   padding: var(--space-xs) var(--space-xl);
   background: var(--glass-bg-light);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
   border-bottom: 1px solid var(--glass-border-subtle);
   overflow-x: auto;
 }
 
 .tagList {
   display: flex;
-  gap: var(--space-xs);
+  gap: 4px;
+  flex-shrink: 0;
 }
 
 .tagPill {
-  padding: var(--space-xs) var(--space-sm);
-  background-color: var(--bg-tertiary);
+  padding: 3px 10px;
+  background: var(--glass-bg-light);
   color: var(--text-secondary);
-  border: 1px solid var(--border-default);
-  border-radius: 9999px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-full);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
@@ -178,27 +215,33 @@
 }
 
 .tagPill:hover {
-  background-color: var(--bg-elevated);
+  background: var(--glass-bg-hover);
   color: var(--text-primary);
 }
 
 .tagPillActive {
-  background-color: var(--accent-primary);
+  background: var(--accent-muted);
   border-color: var(--accent-primary);
-  color: white;
+  color: var(--accent-text);
 }
 
 .tagPillActive:hover {
-  background-color: var(--accent-hover);
-  border-color: var(--accent-hover);
+  background: var(--accent-muted);
 }
 
-.clearFiltersButton {
+.filterControls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-left: auto;
+}
+
+.clearButton {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-xs) var(--space-sm);
-  background-color: transparent;
+  gap: 3px;
+  padding: 3px 8px;
+  background: none;
   color: var(--text-tertiary);
   border: none;
   border-radius: var(--radius-md);
@@ -209,24 +252,16 @@
   white-space: nowrap;
 }
 
-.clearFiltersButton:hover {
-  background-color: var(--error-bg);
+.clearButton:hover {
+  background: var(--error-bg);
   color: var(--error);
 }
 
-/* Filters row */
-.filtersRow {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  margin-left: auto;
-}
-
 .filterSelect {
-  padding: var(--space-xs) var(--space-sm);
-  background-color: var(--bg-tertiary);
+  padding: 3px 8px;
+  background: var(--glass-bg-light);
   color: var(--text-secondary);
-  border: 1px solid var(--border-default);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
   font-size: var(--font-size-xs);
   font-family: var(--font-family-base);
@@ -243,19 +278,11 @@
   border-color: var(--border-hover);
 }
 
-/* Mobile responsiveness */
+/* Responsive */
 @media (max-width: 900px) {
   .navbar {
     padding: var(--space-sm) var(--space-md);
     gap: var(--space-sm);
-  }
-
-  .searchSection {
-    max-width: 250px;
-  }
-
-  .signOutButton span {
-    display: none;
   }
 
   .profileName {
@@ -266,10 +293,9 @@
 @media (max-width: 640px) {
   .navbar {
     flex-wrap: wrap;
-    gap: var(--space-sm);
   }
 
-  .brand span {
+  .logoText {
     display: none;
   }
 
@@ -279,7 +305,7 @@
     max-width: none;
   }
 
-  .tagSection {
+  .filtersBar {
     padding: var(--space-xs) var(--space-md);
   }
 }
