@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, LogOut, X, Code2, User } from "lucide-react";
+import { Search, LogOut, X, User, Sun, Moon } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
+import { useTheme } from "../contexts/ThemeContext";
 import { getLanguageDisplayName } from "../constants/languages";
 import styles from "./Header.module.css";
 
-// Sort option labels
 const sortOptions = [
   { value: "date-desc", label: "Newest" },
   { value: "date-asc", label: "Oldest" },
@@ -28,42 +28,45 @@ function Header({
   hasActiveFilters,
   sortOption,
   onSortChange,
+  snippetCount,
+  filteredCount,
 }) {
   const { user, profile } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState(searchQuery);
 
   const avatarUrl = profile?.avatar_url || user?.user_metadata?.avatar_url;
-  const displayName = profile?.display_name || user?.user_metadata?.full_name || user?.email;
+  const displayName = profile?.display_name || user?.user_metadata?.full_name || "Profile";
 
-  // Debounce search input (300ms)
   useEffect(() => {
     const timer = setTimeout(() => {
       onSearchChange(inputValue);
     }, 300);
-
     return () => clearTimeout(timer);
   }, [inputValue, onSearchChange]);
 
-  // Sync input value when searchQuery prop changes externally
   useEffect(() => {
     setInputValue(searchQuery);
   }, [searchQuery]);
 
-  const getDisplayName = (lang) => getLanguageDisplayName(lang);
-
   return (
     <>
-      {/* Top Navbar */}
       <nav className={styles.navbar} role="navigation">
-        <div className={styles.brand}>
-          <Code2 size={20} className={styles.brandIcon} />
-          <span>SnippetVault</span>
-        </div>
+        {/* Logo */}
+        <button
+          className={styles.brand}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          type="button"
+        >
+          <span className={styles.logoMark}>&lt;/&gt;</span>
+          <span className={styles.logoText}>snippet vault</span>
+        </button>
 
+        {/* Search */}
         <div className={styles.searchSection}>
           <div className={styles.searchWrapper}>
-            <Search size={16} className={styles.searchIcon} />
+            <Search size={14} className={styles.searchIcon} />
             <input
               type="search"
               className={styles.searchInput}
@@ -72,40 +75,53 @@ function Header({
               onChange={(e) => setInputValue(e.target.value)}
               aria-label="Search snippets"
             />
+            {snippetCount > 0 && (
+              <span className={styles.searchCount}>
+                {filteredCount !== snippetCount ? `${filteredCount}/` : ""}{snippetCount}
+              </span>
+            )}
           </div>
         </div>
 
+        {/* Actions */}
         <div className={styles.actions}>
+          <button
+            className={styles.themeToggle}
+            onClick={toggleTheme}
+            aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+            type="button"
+          >
+            {theme === "light" ? <Moon size={15} /> : <Sun size={15} />}
+          </button>
+
           <button
             className={styles.profileButton}
             onClick={() => navigate("/profile")}
             aria-label="View profile"
+            type="button"
           >
             {avatarUrl ? (
-              <img
-                src={avatarUrl}
-                alt=""
-                className={styles.avatarSmall}
-              />
+              <img src={avatarUrl} alt="" className={styles.avatarSmall} />
             ) : (
-              <User size={16} />
+              <User size={15} />
             )}
             <span className={styles.profileName}>{displayName}</span>
           </button>
+
           <button
             className={styles.signOutButton}
             onClick={onSignOut}
             aria-label="Sign out"
+            type="button"
           >
-            <LogOut size={16} />
-            <span>Logout</span>
+            <LogOut size={14} />
           </button>
         </div>
       </nav>
 
-      {/* Tags & Filters Row */}
+      {/* Filters bar */}
       {(allTags.length > 0 || languageOptions.length > 0) && (
-        <div className={styles.tagSection}>
+        <div className={styles.filtersBar}>
           <div className={styles.tagList}>
             {allTags.map((tag) => (
               <button
@@ -115,17 +131,19 @@ function Header({
                 }`}
                 onClick={() => onTagToggle(tag)}
                 aria-pressed={selectedTags.includes(tag)}
+                type="button"
               >
                 {tag}
               </button>
             ))}
           </div>
 
-          <div className={styles.filtersRow}>
+          <div className={styles.filterControls}>
             {hasActiveFilters && (
               <button
-                className={styles.clearFiltersButton}
+                className={styles.clearButton}
                 onClick={onClearFilters}
+                type="button"
               >
                 <X size={12} />
                 <span>Clear</span>
@@ -141,7 +159,7 @@ function Header({
               <option value="">All Languages</option>
               {languageOptions.map(({ language, count }) => (
                 <option key={language} value={language}>
-                  {getDisplayName(language)} ({count})
+                  {getLanguageDisplayName(language)} ({count})
                 </option>
               ))}
             </select>
