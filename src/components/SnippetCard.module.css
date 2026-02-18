@@ -1,11 +1,9 @@
-/* Import theme variables */
 @import "../styles/theme.module.css";
 
-/* Fade-in animation */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
@@ -13,33 +11,30 @@
   }
 }
 
-/* Snippet Card - Glassmorphism */
+/* Card - frosted glass */
 .snippetCard {
   background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
   border: 1px solid var(--glass-border);
-  border-radius: var(--radius-md);
-  padding: var(--space-md);
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--transition-base),
-    border-color var(--transition-base),
-    background var(--transition-base);
+  border-radius: var(--radius-xl);
+  padding: var(--space-md) var(--space-lg);
+  box-shadow: var(--glass-shadow);
+  transition: all var(--transition-base);
   height: 100%;
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
   animation: fadeInUp 0.3s ease-out forwards;
-  box-sizing: border-box;
 }
 
 .snippetCard:hover {
-  box-shadow: var(--shadow-md), var(--shadow-glow);
-  border-color: var(--glass-border);
-  background: rgba(24, 24, 27, 0.8);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-hover);
+  background: var(--glass-bg-hover);
 }
 
-/* Card Header */
+/* Header */
 .cardHeader {
   display: flex;
   justify-content: space-between;
@@ -65,26 +60,25 @@
   color: var(--text-tertiary);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-normal);
-  margin: var(--space-xs) 0 0 0;
-  line-height: var(--line-height-normal);
+  margin: 3px 0 0 0;
+  line-height: var(--line-height-base);
   word-break: break-word;
 }
 
-/* Card Actions */
+/* Actions */
 .cardActions {
   display: flex;
-  gap: var(--space-xs);
+  gap: 2px;
   flex-shrink: 0;
 }
 
-/* Icon Button - Ghost style */
 .iconButton {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-xs);
-  padding: var(--space-xs) var(--space-sm);
-  background-color: transparent;
-  color: var(--text-secondary);
+  gap: 3px;
+  padding: 4px 8px;
+  background: none;
+  color: var(--text-tertiary);
   border: 1px solid transparent;
   border-radius: var(--radius-md);
   font-size: var(--font-size-xs);
@@ -95,9 +89,9 @@
 }
 
 .iconButton:hover {
-  background-color: var(--bg-tertiary);
+  background: var(--glass-bg-hover);
   color: var(--text-primary);
-  border-color: var(--border-default);
+  border-color: var(--glass-border);
 }
 
 .iconButton:active {
@@ -108,18 +102,13 @@
   flex-shrink: 0;
 }
 
-/* Delete button - Danger ghost */
-.deleteButton {
-  color: var(--text-tertiary);
-}
-
 .deleteButton:hover {
-  background-color: var(--error-bg);
+  background: var(--error-bg);
   color: var(--error);
   border-color: transparent;
 }
 
-/* Card Metadata */
+/* Meta */
 .cardMeta {
   display: flex;
   flex-wrap: wrap;
@@ -135,19 +124,19 @@
 .tagList {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-xs);
+  gap: 3px;
 }
 
 .tag {
-  padding: 2px var(--space-sm);
-  background-color: var(--bg-tertiary);
-  color: var(--text-secondary);
-  border-radius: var(--radius-sm);
+  padding: 1px 8px;
+  background: var(--accent-muted);
+  color: var(--accent-text);
+  border-radius: var(--radius-full);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
 }
 
-/* Code Container */
+/* Code */
 .codeContainer {
   position: relative;
   flex: 1;
@@ -155,7 +144,6 @@
   flex-direction: column;
 }
 
-/* Expand Button */
 .expandButton {
   display: flex;
   align-items: center;
@@ -163,9 +151,9 @@
   gap: var(--space-xs);
   width: 100%;
   padding: var(--space-sm);
-  background-color: var(--bg-tertiary);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-default);
+  background: var(--glass-bg-light);
+  color: var(--text-tertiary);
+  border: 1px solid var(--glass-border);
   border-top: none;
   border-radius: 0 0 var(--radius-md) var(--radius-md);
   font-size: var(--font-size-xs);
@@ -175,7 +163,7 @@
 }
 
 .expandButton:hover {
-  background-color: var(--bg-elevated);
+  background: var(--glass-bg-hover);
   color: var(--text-primary);
 }
 
@@ -183,11 +171,11 @@
   flex-shrink: 0;
 }
 
-/* Slide-down animation */
+/* Delete confirm */
 @keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateY(-8px);
+    transform: translateY(-6px);
   }
   to {
     opacity: 1;
@@ -195,11 +183,10 @@
   }
 }
 
-/* Delete Confirmation */
 .deleteConfirm {
-  background-color: var(--error-bg);
+  background: var(--error-bg);
   border: 1px solid var(--error);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   padding: var(--space-md);
   margin-top: var(--space-sm);
   animation: slideDown 0.2s ease-out forwards;
@@ -223,8 +210,8 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
-  padding: var(--space-sm) var(--space-md);
-  background-color: var(--error);
+  padding: 6px 14px;
+  background: var(--error);
   color: white;
   border: none;
   border-radius: var(--radius-md);
@@ -235,7 +222,7 @@
 }
 
 .confirmButton:hover {
-  background-color: #dc2626;
+  opacity: 0.9;
 }
 
 .confirmButton:active {
@@ -243,10 +230,10 @@
 }
 
 .cancelButton {
-  padding: var(--space-sm) var(--space-md);
-  background-color: transparent;
+  padding: 6px 14px;
+  background: var(--glass-bg);
   color: var(--text-primary);
-  border: 1px solid var(--border-default);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
@@ -255,24 +242,21 @@
 }
 
 .cancelButton:hover {
-  background-color: var(--bg-tertiary);
+  background: var(--glass-bg-hover);
   border-color: var(--border-hover);
 }
 
-/* Mobile responsiveness */
+/* Mobile */
 @media (max-width: 640px) {
   .snippetCard {
-    padding: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-lg);
   }
 
   .cardHeader {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-sm);
-  }
-
-  .snippetCard h3 {
-    font-size: var(--font-size-sm);
   }
 
   .cardActions {
@@ -292,9 +276,5 @@
   .cardMeta {
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  .expandButton {
-    font-size: var(--font-size-xs);
   }
 }

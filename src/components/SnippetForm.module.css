@@ -1,18 +1,17 @@
-/* Import theme variables */
 @import "../styles/theme.module.css";
 
-/* Snippet Form - Glassmorphism */
+/* Form - frosted glass */
 .snippetForm {
   background: var(--glass-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
   border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-md);
+  border-radius: var(--radius-xl);
+  padding: var(--space-md) var(--space-lg);
   margin: 0 var(--space-3xl) var(--space-lg);
+  box-shadow: var(--glass-shadow);
 }
 
-/* Form Header */
 .formHeader {
   display: flex;
   align-items: center;
@@ -23,7 +22,6 @@
   font-weight: var(--font-weight-medium);
 }
 
-/* Inline Row - Title, Language, Tags */
 .formRow {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -33,23 +31,21 @@
 
 .snippetForm input,
 .snippetForm select {
-  padding: var(--space-sm) var(--space-md);
-  background: rgba(9, 9, 11, 0.6);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--glass-border-subtle);
+  padding: 8px 12px;
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
   color: var(--text-primary);
   font-size: var(--font-size-sm);
   font-family: var(--font-family-base);
-  transition: border-color var(--transition-fast), background var(--transition-fast);
-  box-sizing: border-box;
+  transition: all var(--transition-fast);
 }
 
 .snippetForm input:focus,
 .snippetForm select:focus {
   outline: none;
   border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px var(--accent-muted);
 }
 
 .snippetForm input::placeholder {
@@ -61,22 +57,19 @@
   min-width: 140px;
 }
 
-/* Code Textarea */
+/* Code textarea */
 .snippetForm textarea {
   width: 100%;
-  padding: var(--space-sm) var(--space-md);
-  background: rgba(9, 9, 11, 0.6);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--glass-border-subtle);
+  padding: 8px 12px;
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
   border-radius: var(--radius-md);
-  color: var(--text-primary);
+  color: #e2e8f0;
   font-size: var(--font-size-sm);
   font-family: var(--font-family-mono);
   resize: vertical;
-  min-height: 270px;
-  box-sizing: border-box;
-  transition: border-color var(--transition-fast), background var(--transition-fast);
+  min-height: 200px;
+  transition: border-color var(--transition-fast);
 }
 
 .snippetForm textarea:focus {
@@ -85,10 +78,10 @@
 }
 
 .snippetForm textarea::placeholder {
-  color: var(--text-tertiary);
+  color: #64748b;
 }
 
-/* Form Actions */
+/* Actions */
 .formActions {
   display: flex;
   gap: var(--space-sm);
@@ -96,26 +89,26 @@
 }
 
 .snippetForm button[type="submit"] {
-  padding: var(--space-sm) var(--space-lg);
-  background-color: var(--accent-primary);
+  padding: 8px 20px;
+  background: var(--accent-primary);
   color: white;
   border: none;
   border-radius: var(--radius-md);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
-  transition: background-color var(--transition-fast);
+  transition: all var(--transition-fast);
 }
 
 .snippetForm button[type="submit"]:hover {
-  background-color: var(--accent-hover);
+  background: var(--accent-hover);
 }
 
 .cancelButton {
-  padding: var(--space-sm) var(--space-lg);
-  background-color: transparent;
+  padding: 8px 20px;
+  background: var(--glass-bg-light);
   color: var(--text-secondary);
-  border: 1px solid var(--border-default);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
@@ -124,26 +117,26 @@
 }
 
 .cancelButton:hover {
-  background-color: var(--bg-tertiary);
+  background: var(--glass-bg-hover);
   color: var(--text-primary);
 }
 
-/* Editing Mode */
+/* Editing state */
 .editing {
   border-color: var(--accent-primary);
   box-shadow: var(--shadow-glow);
 }
 
 .editingHeader {
-  color: var(--accent-primary);
+  color: var(--accent-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   margin-bottom: var(--space-sm);
   padding-bottom: var(--space-xs);
-  border-bottom: 1px solid var(--border-default);
+  border-bottom: 1px solid var(--glass-border);
 }
 
-/* Mobile responsiveness */
+/* Responsive */
 @media (max-width: 900px) {
   .snippetForm {
     margin: 0 var(--space-md) var(--space-lg);
@@ -160,18 +153,13 @@
 
 @media (max-width: 640px) {
   .snippetForm {
-    padding: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
     margin: 0 var(--space-sm) var(--space-md);
+    border-radius: var(--radius-lg);
   }
 
   .formRow {
     grid-template-columns: 1fr;
-  }
-
-  .snippetForm input,
-  .snippetForm select,
-  .snippetForm textarea {
-    font-size: var(--font-size-sm);
   }
 
   .formActions {
