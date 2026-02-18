@@ -6,9 +6,7 @@
   line-height: var(--line-height-base);
   font-weight: var(--font-weight-normal);
 
-  color-scheme: dark;
   color: var(--text-primary);
-  background-color: var(--bg-primary);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -16,10 +14,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 a {
   font-weight: var(--font-weight-medium);
-  color: var(--accent-primary);
-  text-decoration: inherit;
+  color: var(--accent-text);
+  text-decoration: none;
 }
 
 a:hover {
@@ -30,26 +32,56 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background: var(--bg-mesh);
+  background-attachment: fixed;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
 }
 
 button {
   border-radius: var(--radius-md);
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
+  padding: 0.5em 1em;
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   font-family: inherit;
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
-button:focus,
 button:focus-visible {
   outline: 2px solid var(--accent-primary);
   outline-offset: 2px;
+}
+
+input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-tertiary);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
 }
