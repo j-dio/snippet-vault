@@ -29,8 +29,7 @@
   margin-bottom: var(--space-sm);
 }
 
-.snippetForm input,
-.snippetForm select {
+.snippetForm input {
   padding: 8px 12px;
   background: var(--glass-bg-light);
   border: 1px solid var(--glass-border);
@@ -39,6 +38,25 @@
   font-size: var(--font-size-sm);
   font-family: var(--font-family-base);
   transition: all var(--transition-fast);
+}
+
+.snippetForm select {
+  padding: 8px 12px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family-base);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  min-width: 140px;
+}
+
+.snippetForm select option {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  padding: 4px 8px;
 }
 
 .snippetForm input:focus,
@@ -50,11 +68,6 @@
 
 .snippetForm input::placeholder {
   color: var(--text-tertiary);
-}
-
-.snippetForm select {
-  cursor: pointer;
-  min-width: 140px;
 }
 
 /* Code textarea */

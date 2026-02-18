@@ -1,4 +1,4 @@
-@import '../styles/theme.module.css';
+@import "../styles/theme.module.css";
 
 /* Navbar - frosted glass */
 .navbar {
@@ -259,14 +259,20 @@
 
 .filterSelect {
   padding: 3px 8px;
-  background: var(--glass-bg-light);
-  color: var(--text-secondary);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
   font-size: var(--font-size-xs);
   font-family: var(--font-family-base);
   cursor: pointer;
   transition: all var(--transition-fast);
+}
+
+.filterSelect option {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  padding: 4px 8px;
 }
 
 .filterSelect:focus {
