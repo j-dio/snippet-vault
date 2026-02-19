@@ -88,7 +88,7 @@ function VaultPage() {
       );
     }
 
-    const sorted = [...filtered].sort((a, b) => {
+    return [...filtered].sort((a, b) => {
       switch (sortOption) {
         case "date-desc":
           return new Date(b.created_at) - new Date(a.created_at);
@@ -106,8 +106,6 @@ function VaultPage() {
           return 0;
       }
     });
-
-    return sorted;
   }, [snippets, searchQuery, languageFilter, selectedTags, sortOption]);
 
   useEffect(() => {
