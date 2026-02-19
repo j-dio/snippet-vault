@@ -48,10 +48,12 @@
   letter-spacing: -0.01em;
 }
 
-/* Search */
+/* ============================
+   Search  — wider, centered
+   ============================ */
 .searchSection {
   flex: 1;
-  max-width: 380px;
+  max-width: 520px;
 }
 
 .searchWrapper {
@@ -62,14 +64,14 @@
 
 .searchIcon {
   position: absolute;
-  left: 10px;
+  left: 12px;
   color: var(--text-tertiary);
   pointer-events: none;
 }
 
 .searchInput {
   width: 100%;
-  padding: 6px 12px 6px 30px;
+  padding: 8px 80px 8px 34px;
   background: var(--glass-bg-light);
   color: var(--text-primary);
   border: 1px solid var(--glass-border);
@@ -87,10 +89,16 @@
   outline: none;
   border-color: var(--border-focus);
   background: var(--glass-bg);
+  box-shadow: 0 0 0 3px var(--accent-muted);
 }
 
 .searchWrapper:focus-within .searchIcon {
   color: var(--accent-primary);
+}
+
+/* Hide keyboard shortcut badge on focus */
+.searchWrapper:focus-within .searchKbd {
+  opacity: 0;
 }
 
 .searchCount {
@@ -101,11 +109,59 @@
   pointer-events: none;
 }
 
-/* Actions */
+/* Ctrl+K keyboard shortcut badge */
+.searchKbd {
+  position: absolute;
+  right: 42px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 6px;
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-base);
+  font-size: 0.5625rem;
+  color: var(--text-tertiary);
+  pointer-events: none;
+  transition: opacity var(--transition-fast);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-weight: var(--font-weight-medium);
+}
+
+/* ============================
+   Actions
+   ============================ */
 .actions {
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+/* + New Snippet button */
+.newSnippetButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 6px 14px;
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.newSnippetButton:hover {
+  background: var(--accent-hover);
+}
+
+.newSnippetButton:active {
+  transform: scale(0.97);
 }
 
 .themeToggle {
@@ -182,7 +238,9 @@
   color: var(--error);
 }
 
-/* Filters bar */
+/* ============================
+   Filters bar — collapsible tags
+   ============================ */
 .filtersBar {
   display: flex;
   align-items: center;
@@ -192,13 +250,26 @@
   backdrop-filter: var(--glass-blur-sm);
   -webkit-backdrop-filter: var(--glass-blur-sm);
   border-bottom: 1px solid var(--glass-border-subtle);
-  overflow-x: auto;
+  flex-wrap: wrap;
+}
+
+.filtersLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex: 1;
+  min-width: 0;
+}
+
+.filterIcon {
+  color: var(--text-tertiary);
+  flex-shrink: 0;
 }
 
 .tagList {
   display: flex;
   gap: 4px;
-  flex-shrink: 0;
+  flex-wrap: wrap;
 }
 
 .tagPill {
@@ -227,6 +298,33 @@
 
 .tagPillActive:hover {
   background: var(--accent-muted);
+}
+
+/* "More tags" / "Less" toggle button */
+.moreTagsButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 10px;
+  background: none;
+  color: var(--text-tertiary);
+  border: 1px dashed var(--glass-border);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.moreTagsButton:hover {
+  color: var(--accent-text);
+  border-color: var(--accent-primary);
+  background: var(--accent-muted);
+}
+
+.moreTagsButton .chevronUp {
+  transform: rotate(180deg);
 }
 
 .filterControls {
@@ -284,7 +382,9 @@
   border-color: var(--border-hover);
 }
 
-/* Responsive */
+/* ============================
+   Responsive
+   ============================ */
 @media (max-width: 900px) {
   .navbar {
     padding: var(--space-sm) var(--space-md);
@@ -292,6 +392,18 @@
   }
 
   .profileName {
+    display: none;
+  }
+
+  .newSnippetButton span {
+    display: none;
+  }
+
+  .newSnippetButton {
+    padding: 6px 8px;
+  }
+
+  .searchKbd {
     display: none;
   }
 }

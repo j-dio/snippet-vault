@@ -15,7 +15,8 @@
   gap: var(--space-md);
   width: 100%;
   box-sizing: border-box;
-  padding: 0 var(--space-3xl) var(--space-lg);
+  padding: var(--space-lg) var(--space-3xl) var(--space-lg);
+  align-items: start;
 }
 
 /* Ensure grid items don't overflow */

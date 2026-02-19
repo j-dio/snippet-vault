@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
 import SnippetCard from "../components/SnippetCard";
 import SnippetForm from "../components/SnippetForm";
+import SnippetModal from "../components/SnippetModal";
 import Header from "../components/Header";
 import EmptyState from "../components/EmptyState";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -18,6 +19,7 @@ function VaultPage() {
   const [selectedTags, setSelectedTags] = useState([]);
   const [sortOption, setSortOption] = useState("date-desc");
   const [editingSnippet, setEditingSnippet] = useState(null);
+  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
 
   // Get unique languages from snippets with counts
   const languageOptions = useMemo(() => {
@@ -45,7 +47,7 @@ function VaultPage() {
   // Toggle tag selection
   const toggleTag = useCallback((tag) => {
     setSelectedTags((prev) =>
-      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
     );
   }, []);
 
@@ -57,7 +59,8 @@ function VaultPage() {
   }, []);
 
   // Check if any filters are active
-  const hasActiveFilters = searchQuery || languageFilter || selectedTags.length > 0;
+  const hasActiveFilters =
+    searchQuery || languageFilter || selectedTags.length > 0;
 
   // Filter and sort snippets
   const filteredSnippets = useMemo(() => {
@@ -65,7 +68,7 @@ function VaultPage() {
 
     if (languageFilter) {
       filtered = filtered.filter(
-        (snippet) => (snippet.language || "plaintext") === languageFilter
+        (snippet) => (snippet.language || "plaintext") === languageFilter,
       );
     }
 
@@ -81,7 +84,7 @@ function VaultPage() {
       filtered = filtered.filter(
         (snippet) =>
           snippet.title.toLowerCase().includes(query) ||
-          snippet.code.toLowerCase().includes(query)
+          snippet.code.toLowerCase().includes(query),
       );
     }
 
@@ -96,7 +99,9 @@ function VaultPage() {
         case "title-desc":
           return b.title.localeCompare(a.title);
         case "language":
-          return (a.language || "plaintext").localeCompare(b.language || "plaintext");
+          return (a.language || "plaintext").localeCompare(
+            b.language || "plaintext",
+          );
         default:
           return 0;
       }
@@ -126,13 +131,15 @@ function VaultPage() {
   const addSnippet = useCallback(async (formData) => {
     const { data, error } = await supabase
       .from("snippets")
-      .insert([{
-        title: formData.title,
-        use_case: formData.use_case,
-        code: formData.code,
-        language: formData.language,
-        tags: formData.tags
-      }])
+      .insert([
+        {
+          title: formData.title,
+          use_case: formData.use_case,
+          code: formData.code,
+          language: formData.language,
+          tags: formData.tags,
+        },
+      ])
       .select();
 
     if (error) {
@@ -163,57 +170,72 @@ function VaultPage() {
     }
   }, []);
 
-  const updateSnippet = useCallback(async (formData) => {
-    if (!editingSnippet) {
-      toast.error("Error updating snippet.");
-      return;
-    }
+  const updateSnippet = useCallback(
+    async (formData) => {
+      if (!editingSnippet) {
+        toast.error("Error updating snippet.");
+        return;
+      }
 
-    const snippetId = editingSnippet.id;
-    const { error } = await supabase
-      .from("snippets")
-      .update({
-        title: formData.title,
-        use_case: formData.use_case,
-        code: formData.code,
-        language: formData.language,
-        tags: formData.tags
-      })
-      .eq("id", snippetId);
+      const snippetId = editingSnippet.id;
+      const { error } = await supabase
+        .from("snippets")
+        .update({
+          title: formData.title,
+          use_case: formData.use_case,
+          code: formData.code,
+          language: formData.language,
+          tags: formData.tags,
+        })
+        .eq("id", snippetId);
 
-    if (error) {
-      toast.error("Error updating snippet.");
-    } else {
-      const updatedSnippet = {
-        ...editingSnippet,
-        title: formData.title,
-        use_case: formData.use_case,
-        code: formData.code,
-        language: formData.language,
-        tags: formData.tags
-      };
-      setSnippets((prev) => prev.map((s) => (s.id === snippetId ? updatedSnippet : s)));
-      setEditingSnippet(null);
-      toast.success("Snippet updated successfully!");
-    }
-  }, [editingSnippet]);
-
-  const handleFormSubmit = useCallback((formData) => {
-    if (editingSnippet) {
-      updateSnippet(formData);
-    } else {
-      addSnippet(formData);
-    }
-  }, [editingSnippet, updateSnippet, addSnippet]);
+      if (error) {
+        toast.error("Error updating snippet.");
+      } else {
+        const updatedSnippet = {
+          ...editingSnippet,
+          title: formData.title,
+          use_case: formData.use_case,
+          code: formData.code,
+          language: formData.language,
+          tags: formData.tags,
+        };
+        setSnippets((prev) =>
+          prev.map((s) => (s.id === snippetId ? updatedSnippet : s)),
+        );
+        setEditingSnippet(null);
+        toast.success("Snippet updated successfully!");
+      }
+    },
+    [editingSnippet],
+  );
 
   const handleEditSnippet = useCallback((snippet) => {
     setEditingSnippet(snippet);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    setIsFormModalOpen(true);
   }, []);
 
   const handleCancelEdit = useCallback(() => {
     setEditingSnippet(null);
+    setIsFormModalOpen(false);
   }, []);
+
+  const handleOpenNewSnippet = useCallback(() => {
+    setEditingSnippet(null);
+    setIsFormModalOpen(true);
+  }, []);
+
+  const handleFormSubmitAndClose = useCallback(
+    (formData) => {
+      if (editingSnippet) {
+        updateSnippet(formData);
+      } else {
+        addSnippet(formData);
+      }
+      setIsFormModalOpen(false);
+    },
+    [editingSnippet, updateSnippet, addSnippet],
+  );
 
   return (
     <main className={styles.vaultContainer} role="main">
@@ -233,13 +255,16 @@ function VaultPage() {
         onSortChange={setSortOption}
         snippetCount={snippets.length}
         filteredCount={filteredSnippets.length}
+        onNewSnippet={handleOpenNewSnippet}
       />
 
-      <SnippetForm
-        onSubmit={handleFormSubmit}
-        editingSnippet={editingSnippet}
-        onCancelEdit={handleCancelEdit}
-      />
+      <SnippetModal isOpen={isFormModalOpen} onClose={handleCancelEdit}>
+        <SnippetForm
+          onSubmit={handleFormSubmitAndClose}
+          editingSnippet={editingSnippet}
+          onCancelEdit={handleCancelEdit}
+        />
+      </SnippetModal>
       <section className={styles.snippetGrid} aria-label="Code snippets">
         {loading ? (
           <LoadingSpinner />
