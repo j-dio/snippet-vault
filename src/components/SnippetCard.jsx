@@ -5,6 +5,30 @@ import styles from "./SnippetCard.module.css";
 
 const MAX_COLLAPSED_LINES = 10;
 
+/* Language-specific accent colors for the card top border */
+const languageColors = {
+  javascript: "#f7df1e",
+  typescript: "#3178c6",
+  python: "#3572a5",
+  html: "#e34c26",
+  css: "#563d7c",
+  java: "#b07219",
+  cpp: "#f34b7d",
+  csharp: "#178600",
+  php: "#4F5D95",
+  ruby: "#CC342D",
+  go: "#00ADD8",
+  rust: "#dea584",
+  bash: "#89e051",
+  json: "#292929",
+  sql: "#e38c00",
+  gdscript: "#355570",
+  swift: "#F05138",
+  kotlin: "#A97BFF",
+  text: "#6e6e73",
+  plaintext: "#6e6e73",
+};
+
 // Format relative time (e.g., "2 hours ago", "3 days ago")
 function formatRelativeTime(dateString) {
   const date = new Date(dateString);
@@ -32,7 +56,12 @@ function formatRelativeTime(dateString) {
   return `${years} ${years === 1 ? "year" : "years"} ago`;
 }
 
-const SnippetCard = memo(function SnippetCard({ snippet, onCopy, onDelete, onEdit }) {
+const SnippetCard = memo(function SnippetCard({
+  snippet,
+  onCopy,
+  onDelete,
+  onEdit,
+}) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -40,10 +69,12 @@ const SnippetCard = memo(function SnippetCard({ snippet, onCopy, onDelete, onEdi
   const codeLines = snippet.code.split("\n");
   const isLongCode = codeLines.length > MAX_COLLAPSED_LINES;
   const tags = snippet.tags || [];
+  const langColor = languageColors[language] || languageColors.plaintext;
 
-  const displayCode = isExpanded || !isLongCode
-    ? snippet.code
-    : codeLines.slice(0, MAX_COLLAPSED_LINES).join("\n");
+  const displayCode =
+    isExpanded || !isLongCode
+      ? snippet.code
+      : codeLines.slice(0, MAX_COLLAPSED_LINES).join("\n");
 
   const handleDeleteClick = () => {
     setShowDeleteConfirm(true);
@@ -59,7 +90,11 @@ const SnippetCard = memo(function SnippetCard({ snippet, onCopy, onDelete, onEdi
   };
 
   return (
-    <article className={styles.snippetCard} aria-labelledby={`snippet-title-${snippet.id}`}>
+    <article
+      className={styles.snippetCard}
+      aria-labelledby={`snippet-title-${snippet.id}`}
+      style={{ "--lang-color": langColor }}
+    >
       <div className={styles.cardHeader}>
         <div className={styles.cardTitleSection}>
           <h3 id={`snippet-title-${snippet.id}`}>{snippet.title}</h3>
@@ -67,7 +102,11 @@ const SnippetCard = memo(function SnippetCard({ snippet, onCopy, onDelete, onEdi
             <p className={styles.useCase}>{snippet.use_case}</p>
           )}
         </div>
-        <div className={styles.cardActions} role="group" aria-label="Snippet actions">
+        <div
+          className={styles.cardActions}
+          role="group"
+          aria-label="Snippet actions"
+        >
           <button
             className={styles.iconButton}
             onClick={() => onEdit(snippet)}
@@ -113,13 +152,23 @@ const SnippetCard = memo(function SnippetCard({ snippet, onCopy, onDelete, onEdi
       </div>
 
       <div className={styles.codeContainer}>
-        <CodeBlock code={displayCode} language={language} />
+        <div className={styles.codeInner}>
+          <CodeBlock code={displayCode} language={language} />
+          {/* Fade-out gradient when code is clamped */}
+          {isLongCode && !isExpanded && (
+            <div className={styles.codeFade} aria-hidden="true" />
+          )}
+        </div>
         {isLongCode && (
           <button
             className={styles.expandButton}
             onClick={() => setIsExpanded(!isExpanded)}
             aria-expanded={isExpanded}
-            aria-label={isExpanded ? "Collapse code" : `Expand code (${codeLines.length} lines)`}
+            aria-label={
+              isExpanded
+                ? "Collapse code"
+                : `Expand code (${codeLines.length} lines)`
+            }
           >
             {isExpanded ? (
               <>
